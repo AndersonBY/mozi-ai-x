@@ -1,0 +1,36 @@
+[project]
+authors = [{ name = "Anderson", email = "andersonby@163.com" }]
+dependencies = [
+  "betterproto>=2.0.0b6",
+  "psutil>=6.1.1",
+  "grpcio>=1.70.0",
+  "numpy>=2.2.2",
+]
+description = "Mozi AI async version"
+license = { text = "MIT" }
+name = "mozi_ai_x"
+readme = "README.md"
+requires-python = ">=3.10"
+version = "0.1.0"
+
+[build-system]
+build-backend = "pdm.backend"
+requires = ["pdm-backend"]
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+excludes = ["tests"]
+includes = ["src/mozi_ai_x"] # 显式包含包代码        
+package-dir = "src"          # 声明包根目录为 src
+
+[tool.pdm.scripts]
+gen-proto = "python scripts/proto/gen_proto.py --output src/mozi_ai_x/simulation/proto"
+
+[dependency-groups]
+dev = ["betterproto[compiler]>=2.0.0b6", "grpcio-tools>=1.70.0"]
+
+[project.optional-dependencies]
+psycopg = ["psycopg[binary,pool]"]
+mysql = ["mysql-connector-python"]
