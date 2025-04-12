@@ -105,7 +105,7 @@ class CWeapon(CActiveUnit):
             "type": "Weapon",
             "fuel": -1,
             "damage": -1,
-            "sensors": self.get_sensor(),
+            "sensors": self.get_sensors(),
             "weapons_valid": self.get_weapon_infos(),
         }
         return info_dict

@@ -35,13 +35,13 @@ class CActiveUnit(Base):
         # 活动单元传感器列表
         self.sensors = {}
         # 活动单元挂架
-        self.mounts = {}
+        self._mounts = {}
         # 活动单元挂载
         self.loadout = {}
         # 挂载方案的GUid
         self.loadout_guid = ""
         # 活动单元弹药库
-        self.magazines = {}
+        self._magazines = {}
         # 航路点
         self.way_points = {}
         # 名称
@@ -107,7 +107,7 @@ class CActiveUnit(Base):
         # 传感器，需要构建对象类,所以只传ID
         self.sensor_guids = ""
         # 挂架
-        self._mounts = ""
+        self.mounts = ""
         # 毁伤状态
         self.damage_state = ""
         # 失火
@@ -163,7 +163,7 @@ class CActiveUnit(Base):
         # 停靠参数是否包含码头
         self.cocking_ops_has_pier = False
         # 弹药库
-        self._magazines = ""
+        self.magazines = ""
         # 被摧毁
         self.pb_components_destroyed_width = 0.0
         # 轻度
@@ -276,14 +276,14 @@ class CActiveUnit(Base):
             - dict: 挂架字典
                 - 格式: {mount_guid1: mount_obj1, mount_guid2: mount_obj2, ...}
         """
-        mounts_guid = self._mounts.split("@")
+        mounts_guid = self.mounts.split("@")
         mounts_dic = {}
         for guid in mounts_guid:
             if guid in self.situation.mount_dict:
                 mounts_dic[guid] = self.situation.mount_dict[guid]
         return mounts_dic
 
-    def get_loadout(self) -> dict[str, "CLoadout"]:
+    def get_loadouts(self) -> dict[str, "CLoadout"]:
         """
         获取挂载
 
@@ -306,13 +306,13 @@ class CActiveUnit(Base):
                 - 格式: {magazine_guid1: magazine_obj1, magazine_guid2: magazine_obj2, ...}
         """
         magazines_dic = {}
-        magazines_guid = self._magazines.split("@")
+        magazines_guid = self.magazines.split("@")
         for guid in magazines_guid:
             if guid in self.situation.magazine_dict:
                 magazines_dic[guid] = self.situation.magazine_dict[guid]
         return magazines_dic
 
-    def get_sensor(self) -> dict[str, "CSensor"]:
+    def get_sensors(self) -> dict[str, "CSensor"]:
         """
         获取传感器
 
@@ -434,7 +434,6 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_UnitObeysEMCON('{self.guid}', {str(obey).lower()})")
         return response.lua_success
 
-    @validate_uuid4_args(["weapon_db_guid"])
     async def allocate_weapon_to_target(
         self, target: str | tuple[float, float], weapon_db_guid: str, weapon_count: int
     ) -> bool:
@@ -443,7 +442,7 @@ class CActiveUnit(Base):
 
         Args:
             - target: 情报目标 guid 或 坐标
-            - weapon_db_guid: 武器型号数据库 guid
+            - weapon_db_guid: 武器型号数据库 guid，通常为一个整数字符串
             - weapon_count: 分配数量
 
         Returns:
@@ -750,14 +749,13 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
-    @validate_uuid4_args(["target_guid", "weapon_db_guid"])
     async def manual_attack(self, target_guid: str, weapon_db_guid: str, weapon_num: int) -> bool:
         """
         手动开火函数
 
         Args:
             - target_guid: 目标guid
-            - weapon_db_guid: 武器的数据库guid
+            - weapon_db_guid: 武器的数据库guid，通常为一个整数字符串
             - weapon_num: 武器数量
 
         Returns:
@@ -1072,9 +1070,9 @@ class CActiveUnit(Base):
                     elif attr == "autodetectable":
                         active_unit.auto_detectable = bool(value)
                     elif attr == "mounts":
-                        active_unit.mounts = int(value)
+                        active_unit._mounts = int(value)
                     elif attr == "magazines":
-                        active_unit.magazines = int(value)
+                        active_unit._magazines = int(value)
                     elif attr == "unitstate":
                         active_unit.active_unit_status = value
                     elif attr == "fuelstate":
@@ -1475,7 +1473,6 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
-    @validate_uuid4_args(["magazine_guid", "weapon_db_guid"])
     async def set_magazine_weapon_number(self, magazine_guid: str, weapon_db_guid: str, number: int) -> bool:
         """
         往单元的弹药库中添加指定数量的武器

@@ -72,7 +72,7 @@ class CFacility(CActiveUnit):
             "type": "Facility",
             "fuel": 0,
             "damage": self.damage_state,
-            "sensors": self.get_sensor(),
+            "sensors": self.get_sensors(),
             "weapons_valid": self.get_weapon_infos(),
         }
         return info_dict

@@ -155,7 +155,7 @@ class CAircraft(CActiveUnit):
             "loadout": self.loadout_obj,
             "fuel": self.current_fuel_quantity,
             "damage": self.damage_state,
-            "sensors": self.get_sensor(),
+            "sensors": self.get_sensors(),
             "weapons_valid": self.get_weapon_infos(),
         }
         return info_dict
