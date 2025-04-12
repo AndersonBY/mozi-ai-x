@@ -28,7 +28,7 @@ class CMount(Base):
         # 挂载的武器的数量
         self.load_weapon_count = ""
         # 获取挂架下武器的最大载弹量和当前载弹量集合
-        self.load_ratio = ""
+        self.load_ratio = ""  # 5a8226e3-a454-4a61-977d-c8b518a350f1$hsfw-dataweapon-00000000001152$4$4
         # 传感器的guid
         self.sensor_guids = ""
         # 重新装载优先级选中的武器DBID集合

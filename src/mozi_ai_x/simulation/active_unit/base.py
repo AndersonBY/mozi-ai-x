@@ -442,7 +442,7 @@ class CActiveUnit(Base):
 
         Args:
             - target: 情报目标 guid 或 坐标
-            - weapon_db_guid: 武器型号数据库 guid，通常为一个整数字符串
+            - weapon_db_guid: 武器型号数据库 guid，形如：hsfw-dataweapon-00000000001152
             - weapon_count: 分配数量
 
         Returns:
@@ -755,7 +755,7 @@ class CActiveUnit(Base):
 
         Args:
             - target_guid: 目标guid
-            - weapon_db_guid: 武器的数据库guid，通常为一个整数字符串
+            - weapon_db_guid: 武器的数据库guid，形如：hsfw-dataweapon-00000000001152
             - weapon_num: 武器数量
 
         Returns:
