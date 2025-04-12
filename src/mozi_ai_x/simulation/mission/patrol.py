@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 from .base import CMission
 from ..situ_interpret import CPatrolMissionDict
+from mozi_ai_x.utils.validator import validate_literal_args
 
 
 class CPatrolMission(CMission):
@@ -325,6 +326,7 @@ class CPatrolMission(CMission):
         """
         return await super().set_throttle("attackThrottleShip", throttle)
 
+    @validate_literal_args
     async def set_group_size(self, group_size: Literal[1, 2, 3, 4, 6]) -> bool:
         """
         设置巡逻任务水面舰艇/潜艇编队规模

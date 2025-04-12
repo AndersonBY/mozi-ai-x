@@ -1,3 +1,4 @@
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
 from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
@@ -241,6 +242,7 @@ class CScenario(BaseObject):
         units.update(unguided_weapons)
         return units
 
+    @validate_uuid4_args(["guid"])
     def unit_is_alive(self, guid: str) -> bool:
         """
         从上帝视角用guid判断实体单元是否存在
@@ -282,6 +284,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(f"ScenEdit_RemoveSide({{side='{side}'}})")
         return response.lua_success
 
+    @validate_literal_args
     async def set_side_posture(self, side_a: str, side_b: str, relation: Literal["F", "H", "N", "U"]) -> bool:
         """
         设置一方对另一方的立场
@@ -749,6 +752,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def add_trigger_points(
         self, name: str, side: str, point_value: int, reach_direction: Literal[0, 1, 2]
     ) -> bool:
@@ -1165,6 +1169,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def add_trigger_regular_time(
         self, name: str, interval: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     ) -> bool:
@@ -1239,6 +1244,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def add_trigger_unit_detected(
         self, name: str, target_filter_dict: dict, detector_side: str, mcl: Literal[0, 1, 2, 3, 4]
     ) -> bool:
@@ -1831,6 +1837,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def add_condition_side_posture(
         self,
         name: str,
@@ -2011,6 +2018,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["side_guid"])
     async def add_trigger_aircraft_take_off(self, name: str, side_guid: str) -> bool:
         """
         添加飞机起飞触发器
@@ -2029,6 +2037,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["side_guid"])
     async def add_trigger_aircraft_landing(self, name: str, side_guid: str) -> bool:
         """
         添加飞机降落触发器

@@ -38,6 +38,8 @@ from .situ_interpret import CSideDict
 
 from .base import Base
 
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
+
 
 class CSide(Base):
     """方"""
@@ -640,6 +642,7 @@ class CSide(Base):
         """
         return self.total_score
 
+    @validate_uuid4_args(["guid"])
     def get_unit_by_guid(self, guid: str) -> "CActiveUnit | None":
         """
         根据guid获取实体对象
@@ -664,6 +667,7 @@ class CSide(Base):
             return self.submarines[guid]
         return None
 
+    @validate_uuid4_args(["contact_guid"])
     def get_contact_by_guid(self, contact_guid: str) -> "CContact | None":
         """
         根据情报对象guid获取情报对象
@@ -706,6 +710,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(lua_cmd)
         return float(response.raw_data)
 
+    @validate_literal_args
     async def add_mission_patrol(
         self, name: str, patrol_type_num: Literal[0, 1, 2, 3, 4, 5, 6], zone_points: list[str]
     ) -> "CPatrolMission | None":
@@ -747,6 +752,7 @@ class CSide(Base):
             obj.mission_class = 2  # 巡逻
         return obj
 
+    @validate_literal_args
     async def add_mission_strike(self, name: str, strike_type_num: Literal[0, 1, 2, 3]):
         """
         添加打击任务
@@ -999,6 +1005,7 @@ class CSide(Base):
                 return_dict[kv[0].strip()] = kv[1].strip().replace("'", "")
         return return_dict
 
+    @validate_literal_args
     async def set_ecom_status(
         self, object_type: Literal["Side", "Mission", "Group", "Unit"], object_name: str, emcon: str
     ) -> bool:
@@ -1048,6 +1055,7 @@ class CSide(Base):
             point.longitude = longitude
         return point
 
+    @validate_literal_args
     async def add_zone(
         self,
         zone_type: Literal[0, 1],
@@ -1096,6 +1104,7 @@ class CSide(Base):
             return obj
         return None
 
+    @validate_uuid4_args(["zone_guid"])
     async def set_zone(
         self,
         zone_guid: str,
@@ -1161,6 +1170,7 @@ class CSide(Base):
                 return v
         return None
 
+    @validate_uuid4_args(["contact_guid"])
     async def assign_target_to_mission(self, contact_guid: str, mission_name_or_guid: str) -> bool:
         """
         将目标分配给一项打击任务
@@ -1176,6 +1186,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
 
+    @validate_uuid4_args(["contact_guid"])
     async def drop_contact(self, contact_guid: str) -> bool:
         """
         放弃目标, 不再将所选目标列为探测对象
@@ -1190,6 +1201,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def wcsfa_contact_types_all_unit(self, attack_status: Literal["Hold", "Tight", "Free", "Inherited"]) -> bool:
         """
         控制所有单元对所有目标类型的攻击状态。
@@ -1208,6 +1220,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
 
+    @validate_literal_args
     async def lpcw_attack_all_unit(self, ignore_planned_path: Literal["Yes", "No", "Inherited"]) -> bool:
         """
         所有单元攻击时是否忽略计划航线。
@@ -1305,6 +1318,7 @@ class CSide(Base):
             return False
         raise ValueError(f"推演方{self.name}的操控属性获取失败，返回值为{response.raw_data}")
 
+    @validate_uuid4_args(["zone_guid"])
     async def remove_zone(self, zone_guid: str) -> bool:
         """
         删除指定推演方的指定禁航区或封锁区
@@ -1318,6 +1332,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_ScenEdit_RemoveZone('{self.name}','{zone_guid}')")
         return response.lua_success
 
+    @validate_uuid4_args(["point_guid"])
     async def delete_reference_point(self, point_guid: str) -> bool:
         """
         删除参考点
@@ -1346,6 +1361,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(set_str)
         return response.lua_success
 
+    @validate_literal_args
     async def add_plan_way(self, way_type: Literal[0, 1], way_name: str) -> bool:
         """
         为指定推演方添加一预设航线（待指定航路点）
@@ -1555,6 +1571,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_uuid4_args(["contact_guid"])
     async def set_mark_contact(self, contact_guid: str, relation: str) -> bool:
         """
         设置目标对抗关系
@@ -1593,6 +1610,7 @@ class CSide(Base):
         )
         return response.lua_success
 
+    @validate_literal_args
     async def add_unit(
         self,
         unit_type: Literal["submarine", "ship", "facility", "aircraft"],
@@ -1846,6 +1864,8 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(f"ScenEdit_ImportMission('{self.guid}','{mission_name}')")
         return response.lua_success
 
+    @validate_uuid4_args(["base_unit_guid"])
+    @validate_literal_args
     async def add_unit_to_facility(
         self,
         unit_type: Literal["facility", "submarine", "ship", "aircraft"],
@@ -1905,6 +1925,7 @@ class CSide(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_DeleteAllUnits('{self.name}')")
         return response.lua_success
 
+    @validate_uuid4_args(["mine_db_guid"])
     async def deploy_mine(self, mine_db_guid: str, mine_count: int, area: list[str]) -> bool:
         """
         给某一方添加雷

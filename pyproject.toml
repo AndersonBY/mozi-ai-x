@@ -11,7 +11,7 @@ license = { text = "MIT" }
 name = "mozi_ai_x"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "0.1.1"
+version = "0.2.0"
 
 [build-system]
 build-backend = "pdm.backend"
@@ -30,6 +30,7 @@ gen-proto = "python scripts/proto/gen_proto.py --output src/mozi_ai_x/simulation
 
 [dependency-groups]
 dev = ["betterproto[compiler]>=2.0.0b6", "grpcio-tools>=1.70.0"]
+validator = ["libcst>=1.7.0"]
 
 [project.optional-dependencies]
 psycopg = ["psycopg[binary,pool]"]

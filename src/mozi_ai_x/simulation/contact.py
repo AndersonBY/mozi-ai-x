@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 from .base import Base
 from .situ_interpret import CContactDict
+from mozi_ai_x.utils.validator import validate_literal_args
 
 
 class CContact(Base):
@@ -204,6 +205,7 @@ class CContact(Base):
         """
         return self.situation.side_dict[self.side]
 
+    @validate_literal_args
     async def set_mark_contact(self, contact_type: Literal["F", "N", "U", "H"]) -> bool:
         """
         标识目标立场

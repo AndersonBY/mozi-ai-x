@@ -12,6 +12,7 @@ from .active_unit import CGroup
 from .mission import MissionTypes
 from .situ_interpret import CDoctrineDict
 from ..utils.log import mprint_with_name
+from mozi_ai_x.utils.validator import validate_literal_args
 
 mprint = mprint_with_name("Doctrine")
 
@@ -275,6 +276,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"use_nuclear_weapons": use})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_weapon_control_status(
         self,
         domain: Literal[
@@ -298,6 +300,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({domain: fire_status})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_weapon_control_status_subsurface(self, fire_status: Literal[0, 1, 2]) -> bool:
         """
         设置对潜武器控制状态
@@ -310,6 +313,7 @@ class CDoctrine(Base):
         """
         return await self.set_weapon_control_status("weapon_control_status_subsurface", fire_status)
 
+    @validate_literal_args
     async def set_weapon_control_status_surface(self, fire_status: Literal[0, 1, 2]) -> bool:
         """
         设置对海武器控制状态
@@ -322,6 +326,7 @@ class CDoctrine(Base):
         """
         return await self.set_weapon_control_status("weapon_control_status_surface", fire_status)
 
+    @validate_literal_args
     async def set_weapon_control_status_land(self, fire_status: Literal[0, 1, 2]) -> bool:
         """
         设置对地武器控制状态
@@ -334,6 +339,7 @@ class CDoctrine(Base):
         """
         return await self.set_weapon_control_status("weapon_control_status_land", fire_status)
 
+    @validate_literal_args
     async def set_weapon_control_status_air(self, fire_status: Literal[0, 1, 2]) -> bool:
         """
         设置对空武器控制状态
@@ -359,6 +365,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"ignore_plotted_course": ignore})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_ambiguous_targets_engaging_status(
         self, status: Literal["Ignore", "Optimistic", "Pessimistic"]
     ) -> bool:
@@ -407,6 +414,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"ignore_emcon_while_under_attack": ignore})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def use_kinematic_range_for_torpedoes(self, usage_mode: Literal[0, 1, 2]) -> bool:
         """
         设置如何使用鱼雷的动力航程
@@ -438,6 +446,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"automatic_evasion": evade})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def use_refuel_supply(self, policy: Literal[0, 1, 2]) -> bool:
         """
         设置是否允许加油补给
@@ -454,6 +463,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"use_refuel_unrep": policy})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def select_refuel_supply_object(self, policy: Literal[0, 1, 2]) -> bool:
         """
         设置加油补给的选择对象
@@ -470,6 +480,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"refuel_unrep_selection": policy})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def refuel_supply_allies(self, policy: Literal[0, 1, 2, 3]) -> bool:
         """
         设置是否给盟军单元加油补给
@@ -487,6 +498,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"refuel_unrep_allied": policy})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_air_operations_tempo(self, tempo: Literal["Surge", "Sustained"]) -> bool:
         """
         设置空战节奏
@@ -502,6 +514,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"air_operations_tempo": tempo})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def quick_turnaround_for_aircraft(self, mode: Literal["Yes", "FightersAndASW", "No"]) -> bool:
         """
         设置是否快速出动飞机
@@ -521,6 +534,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"quick_turnaround_for_aircraft": mode})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_fuel_state_for_aircraft(
         self,
         fuel_state: Literal[
@@ -562,6 +576,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"fuel_state_planned": fuel_state})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_fuel_state_for_air_group(
         self,
         fuel_state: Literal[
@@ -587,6 +602,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"fuel_state_rtb": fuel_state})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_weapon_state_for_aircraft(
         self,
         weapon_state: Literal[
@@ -644,6 +660,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"weapon_state_planned": weapon_state})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_weapon_state_for_air_group(
         self,
         weapon_state: Literal[
@@ -731,6 +748,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"maintain_standoff": keep_distance})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def avoid_being_searched_for_submarine(
         self, decision: Literal["No", "Yes_ExceptSelfDefence", "Yes_Always"]
     ) -> bool:
@@ -749,6 +767,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"avoid_contact": decision})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def dive_on_threat(
         self, decision: Literal["Yes", "Yes_ESM_Only", "Yes_Ships20nm_Aircraft30nm", "No"]
     ) -> bool:
@@ -768,6 +787,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"dive_on_threat": decision})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_recharging_condition_on_patrol(
         self,
         recharging_condition: Literal[
@@ -805,6 +825,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"recharge_on_patrol": recharging_condition})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_recharging_condition_on_attack(
         self,
         recharging_condition: Literal[
@@ -842,6 +863,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"recharge_on_attack": recharging_condition})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def use_aip(
         self,
         decision: Literal[
@@ -865,6 +887,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"use_aip": decision})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def use_dipping_sonar(
         self,
         decision: Literal[
@@ -886,6 +909,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"dipping_sonar": decision})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def set_em_control_status(
         self, em_item: Literal["Radar", "Sonar", "OECM"], status: Literal["Passive", "Active"]
     ) -> bool:
@@ -960,6 +984,7 @@ class CDoctrine(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_literal_args
     async def withdraw_on_damage(
         self,
         damage_degree: Literal[
@@ -987,6 +1012,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"withdraw_on_damage": damage_degree})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def withdraw_on_fuel(
         self,
         fuel_quantity: Literal[
@@ -1014,6 +1040,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"withdraw_on_fuel": fuel_quantity})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def withdraw_on_attack_weapon(
         self,
         weapon_quantity: Literal[
@@ -1041,6 +1068,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"withdraw_on_attack": weapon_quantity})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def withdraw_on_defence_weapon(
         self,
         weapon_quantity: Literal[
@@ -1068,6 +1096,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"withdraw_on_defence": weapon_quantity})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def redeploy_on_damage(
         self,
         damage_degree: Literal[
@@ -1095,6 +1124,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"deploy_on_damage": damage_degree})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def redeploy_on_fuel(
         self,
         fuel_quantity: Literal[
@@ -1124,6 +1154,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"deploy_on_fuel": fuel_quantity})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def redeploy_on_attack_weapon(
         self,
         weapon_quantity: Literal[
@@ -1155,6 +1186,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"deploy_on_attack": weapon_quantity})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def redeploy_on_defence_weapon(
         self,
         weapon_quantity: Literal[
@@ -1186,6 +1218,7 @@ class CDoctrine(Base):
         cmd = self._build_doctrine_command({"deploy_on_defence": weapon_quantity})
         return await self._execute_doctrine_command(cmd)
 
+    @validate_literal_args
     async def reset(
         self,
         level: Literal["Left", "Middle", "Right"],

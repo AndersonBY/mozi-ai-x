@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 
 from ..base import Base
 from ..situ_interpret import CMagazineDict
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
 
 
 class CMagazine(Base):
@@ -29,6 +30,7 @@ class CMagazine(Base):
 
         self.var_map = CMagazineDict.var_map
 
+    @validate_literal_args
     async def set_magazine_state(self, state: Literal["正常运转", "轻度毁伤", "中度毁伤", "重度毁伤", "摧毁"]) -> bool:
         """
         设置弹药库状态
@@ -44,6 +46,7 @@ class CMagazine(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_guid"])
     async def remove_weapon(self, weapon_guid: str) -> bool:
         """
         删除单元中指定弹药库下的指定武器

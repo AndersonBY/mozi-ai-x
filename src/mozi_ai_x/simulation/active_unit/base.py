@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 
 from ..base import Base
 from ...utils.log import mprint_with_name
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
 
 
 mprint = mprint_with_name("ActiveUnit")
@@ -195,6 +196,8 @@ class CActiveUnit(Base):
         Returns:
             - 任务对象
         """
+        if not self.assigned_mission:
+            return None
         return self.situation.get_obj_by_guid(self.assigned_mission)
 
     def get_original_detector_side(self) -> "CSide":
@@ -324,6 +327,7 @@ class CActiveUnit(Base):
                 sensors_dic[guid] = self.situation.sensor_dict[guid]
         return sensors_dic
 
+    @validate_uuid4_args(["contact_guid"])
     async def get_range_to_contact(self, contact_guid: str) -> float:
         """
         获取单元与目标的距离（单位海里）
@@ -430,6 +434,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_UnitObeysEMCON('{self.guid}', {str(obey).lower()})")
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_db_guid"])
     async def allocate_weapon_to_target(
         self, target: str | tuple[float, float], weapon_db_guid: str, weapon_count: int
     ) -> bool:
@@ -454,6 +459,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_uuid4_args(["contact_guid"])
     async def unit_drop_target_contact(self, contact_guid: str) -> bool:
         """
         放弃对指定目标进行攻击。
@@ -545,6 +551,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"HS_ReturnToBase('{self.guid}')")
         return response.lua_success
 
+    @validate_uuid4_args(["base_guid"])
     async def select_new_base(self, base_guid: str) -> bool:
         """
         单元选择新基地/新港口
@@ -638,6 +645,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["contact_guid"])
     async def auto_attack(self, contact_guid: str) -> bool:
         """
         自动攻击目标
@@ -672,6 +680,7 @@ class CActiveUnit(Base):
             mprint.warning("desired_speed 参数类型错误")
             return False
 
+    @validate_literal_args
     async def set_throttle(self, enum_throttle: Literal[1, 2, 3, 4]) -> bool:
         """
         设置单元油门
@@ -741,6 +750,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["target_guid", "weapon_db_guid"])
     async def manual_attack(self, target_guid: str, weapon_db_guid: str, weapon_num: int) -> bool:
         """
         手动开火函数
@@ -772,6 +782,7 @@ class CActiveUnit(Base):
             mprint.warning("不是飞机")
             return False
 
+    @validate_literal_args
     async def drop_active_sonobuoy(self, deep_or_shallow: Literal["deep", "shallow"]) -> bool:
         """
         投放主动声呐
@@ -790,6 +801,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_literal_args
     async def drop_passive_sonobuoy(self, deep_or_shallow: Literal["deep", "shallow"]) -> bool:
         """
         投放被动声呐
@@ -808,6 +820,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_literal_args
     async def drop_sonobuoy(
         self, deep_or_shallow: Literal["deep", "shallow"], passive_or_active: Literal["active", "passive"]
     ) -> bool:
@@ -829,6 +842,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_record_guid"])
     async def set_weapon_reload_priority(self, weapon_record_guid: str, priority: bool) -> bool:
         """
         设置武器重新装载优先级
@@ -847,6 +861,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["mag_guid"])
     async def add_weapon_to_unit_magazine(self, mag_guid: str, weapon_db_id: int, number: int) -> bool:
         """
         往弹药库内添加武器
@@ -886,6 +901,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
 
+    @validate_literal_args
     async def wcsf_contact_types_unit(self, attack_status: Literal["Hold", "Tight", "Free", "Inherited"]) -> bool:
         """
         控制指定单元对所有目标类型的攻击状态。
@@ -904,6 +920,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
 
+    @validate_uuid4_args(["target_guid"])
     async def allocate_all_weapons_to_target(self, target_guid: str, weapon_db_id: int) -> bool:
         """
         为手动交战分配同类型所有武器。
@@ -919,6 +936,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_salvo_guid"])
     async def remove_salvo_target(self, weapon_salvo_guid: str) -> bool:
         """
         取消手动交战时齐射攻击目标。
@@ -1252,6 +1270,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_RemoveCargoToUnit('{self.guid}',{cargo_db_id})")
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_rec_guid"])
     async def set_magazine_weapon_current_load(self, weapon_rec_guid: str, current_load: int) -> bool:
         """
         设置弹药库武器数量
@@ -1268,6 +1287,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["magazine_guid"])
     async def remove_magazine(self, magazine_guid: str) -> bool:
         """
         删除弹药库
@@ -1283,6 +1303,8 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["magazine_guid"])
+    @validate_literal_args
     async def set_magazine_state(
         self, magazine_guid: str, state: Literal["正常运转", "轻度毁伤", "中度毁伤", "重度毁伤", "摧毁"]
     ) -> bool:
@@ -1301,6 +1323,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_rec_guid"])
     async def set_weapon_current_load(self, weapon_rec_guid: str, number: int) -> bool:
         """
         设置挂架武器数量
@@ -1317,6 +1340,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["base_guid"])
     async def add_to_host(self, base_guid: str) -> bool:
         """
         将单元部署进基地
@@ -1375,6 +1399,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["mount_guid"])
     async def remove_mount(self, mount_guid: str) -> bool:
         """
         删除单元中指定的武器挂架
@@ -1390,6 +1415,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["mount_guid"])
     async def add_weapon(self, weapon_db_id: int, mount_guid: str) -> bool:
         """
         给单元挂架中添加武器
@@ -1406,6 +1432,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["weapon_rec_guid"])
     async def remove_weapon(self, weapon_rec_guid: str) -> bool:
         """
         通过武器属性删除单元的武器
@@ -1421,6 +1448,8 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_uuid4_args(["component_guid"])
+    @validate_literal_args
     async def set_unit_damage(self, overall_damage: float, component_guid: str, level: Literal[0, 1, 2, 3, 4]) -> bool:
         """
         设置单元总体毁伤和单元各组件的毁伤值
@@ -1446,6 +1475,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["magazine_guid", "weapon_db_guid"])
     async def set_magazine_weapon_number(self, magazine_guid: str, weapon_db_guid: str, number: int) -> bool:
         """
         往单元的弹药库中添加指定数量的武器
@@ -1464,6 +1494,7 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
+    @validate_literal_args
     async def set_proficiency(self, proficiency: Literal["Novice", "Cadet", "Regular", "Veteran", "Ace"]) -> bool:
         """
         设置单元训练水平

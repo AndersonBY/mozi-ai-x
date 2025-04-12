@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 from .base import CActiveUnit
 from ..situ_interpret import CGroupDict
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
 
 
 class CGroup(CActiveUnit):
@@ -131,6 +132,7 @@ class CGroup(CActiveUnit):
             return doctrine
         return None
 
+    @validate_uuid4_args(["unit_guid"])
     async def add_unit(self, unit_guid: str) -> bool:
         """
         编队添加一个单元
@@ -145,6 +147,7 @@ class CGroup(CActiveUnit):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["unit_guid"])
     async def remove_unit(self, unit_guid: str) -> bool:
         """
         将单元移除编组
@@ -172,6 +175,7 @@ class CGroup(CActiveUnit):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def set_formation_group_member(
         self, unit_name: str, area_type: Literal["FIXED", "Rotating"], bearing: int, distance: int
     ) -> bool:
@@ -194,6 +198,7 @@ class CGroup(CActiveUnit):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["unit_guid"])
     async def set_unit_sprint_and_drift(self, unit_guid: str, sprint_and_drift: bool) -> bool:
         """
         控制编队内非领队单元相对于编队是否进行高低速交替航行。

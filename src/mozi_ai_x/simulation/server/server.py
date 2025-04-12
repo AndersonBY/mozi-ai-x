@@ -11,6 +11,7 @@ from grpclib.client import Channel
 from ..scenario import CScenario
 from ...utils.log import mprint_with_name
 from ..proto import GrpcRequest, GRpcStub as GrpcStub
+from mozi_ai_x.utils.validator import validate_literal_args
 
 from .response import ServerResponse
 
@@ -304,6 +305,7 @@ class MoziServer:
         response = await self.send_and_recv(f"Hs_ScenEdit_LoadScenario('{scenario_path}', {str(edit_mode).lower()})")
         return response.lua_success
 
+    @validate_literal_args
     async def load_scenario_in_linux(self, scenario_path: str, model: Literal["Edit", "Play"]) -> bool:
         """
         linux上加载想定
@@ -365,6 +367,7 @@ class MoziServer:
         response = await self.send_and_recv("Hs_ScenEdit_CreateNewScenario()")
         return response.lua_success
 
+    @validate_literal_args
     async def set_simulate_compression(self, n_compression: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8] = 4) -> bool:
         """
         设置想定推演倍速
@@ -492,6 +495,7 @@ class MoziServer:
         response = await self.send_and_recv("ReturnObj(Hs_GRPCSimRun())")
         return response.lua_success
 
+    @validate_literal_args
     async def init_situation(self, scenario: "CScenario", app_mode: Literal[1, 2, 3, 4]) -> None:
         """
         初始化态势

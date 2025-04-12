@@ -67,6 +67,7 @@ from .reference_point import CReferencePoint
 from .response import CResponse
 
 from ..utils.log import mprint_with_name
+from mozi_ai_x.utils.validator import validate_uuid4_args
 
 if TYPE_CHECKING:
     from .server import MoziServer
@@ -581,6 +582,7 @@ class CSituation:
             if new_guid not in self.all_guid + self.pseudo_situ_all_guid:
                 return new_guid
 
+    @validate_uuid4_args(["guid"])
     def get_obj_by_guid(self, guid: str) -> Optional[Any]:
         """GUID 全局查询"""
         if guid not in self.all_guid_info:
@@ -593,11 +595,13 @@ class CSituation:
 
         return self.object_dict_map[handler["dict"]].get(guid)
 
+    @validate_uuid4_args(["guid"])
     def throw_into_pseudo_situ(self, guid: str, name: str):
         """伪态势管理"""
         self.pseudo_situ_all_guid.append(guid)
         self.pseudo_situ_all_name.append(name)
 
+    @validate_uuid4_args(["guid"])
     def throw_into_pseudo_situ_all_guid(self, guid: str):
         """
         伪态势管理

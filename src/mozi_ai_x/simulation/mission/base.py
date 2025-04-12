@@ -8,6 +8,8 @@ if TYPE_CHECKING:
     from ..side import CSide
     from ..active_unit import CActiveUnit
 
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
+
 from ..base import Base
 
 
@@ -283,6 +285,7 @@ class CMission(Base):
             set_str = "Radar=Passive"
         return await self.situation.side_dict[self.side].set_ecom_status("Mission", self.name, set_str)
 
+    @validate_uuid4_args(["unit_guid"])
     async def assign_unit(self, unit_guid: str, escort: bool = False) -> bool:
         """
         分配单元
@@ -344,6 +347,7 @@ class CMission(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_literal_args
     async def set_throttle(
         self,
         throttle_type: Literal[
@@ -381,6 +385,7 @@ class CMission(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_literal_args
     async def set_altitude(
         self,
         altitude_type: Literal["transitAltitudeAircraft", "stationAltitudeAircraft", "attackAltitudeAircraft"],
@@ -412,6 +417,7 @@ class CMission(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_literal_args
     async def add_plan_way_to_mission(self, way_type: Literal[0, 1, 2, 3], way_name_or_id: str) -> bool:
         """
         为任务分配预设航线
@@ -448,6 +454,7 @@ class CMission(Base):
         )
         return response.lua_success
 
+    @validate_literal_args
     async def set_use_refuel_unrep(self, use_refuel_unrep: Literal[0, 1, 2]) -> bool:
         """
         设置空中加油
@@ -466,6 +473,7 @@ class CMission(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
+    @validate_literal_args
     async def set_submarine_depth(
         self, depth_type: Literal["transitDepthSubmarine", "stationDepthSubmarine"], depth: float
     ) -> bool:

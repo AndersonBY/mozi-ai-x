@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 
 from .base import CActiveUnit
 from ..situ_interpret import CAircraftDict
+from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args
 
 
 class CAircraft(CActiveUnit):
@@ -236,6 +237,7 @@ class CAircraft(CActiveUnit):
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
 
+    @validate_literal_args
     async def ok_ready_mission(self, enable_quick_turnaround: bool, combo_box: Literal[-1, 0]) -> bool:
         """
         飞机按对应的挂载方案所需准备时间完成出动准备
@@ -263,6 +265,7 @@ class CAircraft(CActiveUnit):
         response = await self.mozi_server.send_and_recv(f"Hs_ScenEdit_AirOpsAbortLaunch({{'{self.guid}'}})")
         return response.lua_success
 
+    @validate_uuid4_args(["tanker_guid"])
     async def refuel(self, tanker_guid: str) -> bool:
         """
         命令单元多种方式寻找加油机（自动寻找加油机、指定加油机、
@@ -311,6 +314,7 @@ class CAircraft(CActiveUnit):
         response = await self.mozi_server.send_and_recv(f"Hs_ScenEdit_TimeToReady('{time}',{{'{self.guid}'}}")
         return response.lua_success
 
+    @validate_literal_args
     async def ready_immediately(
         self,
         loadout_db_id: int,

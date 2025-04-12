@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 
 from .base import CActiveUnit
 from ..situ_interpret import CWeaponDict
+from mozi_ai_x.utils.validator import validate_uuid4_args
 
 
 class CWeapon(CActiveUnit):
@@ -109,6 +110,7 @@ class CWeapon(CActiveUnit):
         }
         return info_dict
 
+    @validate_uuid4_args(["target_guid"])
     async def unit_target_sim_break_off(self, type: str, side: str, target_guid: str, distance: float) -> bool:
         """
         武器距离目标多少公里后暂停
@@ -129,6 +131,7 @@ class CWeapon(CActiveUnit):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
+    @validate_uuid4_args(["active_unit_guid"])
     async def clear_weapon_way(self, active_unit_guid: str) -> bool:
         """
         清空手动攻击时武器的航路点。
@@ -142,6 +145,7 @@ class CWeapon(CActiveUnit):
         response = await self.mozi_server.send_and_recv(f"Hs_ClearWeaponWay('{active_unit_guid}','{self.guid}')")
         return response.lua_success
 
+    @validate_uuid4_args(["active_unit_guid", "contact_guid"])
     async def set_weapon_way(
         self, active_unit_guid: str, contact_guid: str, latitude: float, longitude: float
     ) -> bool:
