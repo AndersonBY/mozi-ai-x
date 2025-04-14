@@ -1268,20 +1268,19 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_RemoveCargoToUnit('{self.guid}',{cargo_db_id})")
         return response.lua_success
 
-    @validate_uuid4_args(["weapon_rec_guid"])
-    async def set_magazine_weapon_current_load(self, weapon_rec_guid: str, current_load: int) -> bool:
+    async def set_magazine_weapon_current_load(self, weapon_db_id: str, current_load: int) -> bool:
         """
         设置弹药库武器数量
 
         Args:
-            - weapon_rec_guid: 武器记录guid
+            - weapon_db_id: 武器记录guid
             - current_load: 当前武器装载数量
 
         Returns:
             - bool: 是否成功
         """
         response = await self.mozi_server.send_and_recv(
-            f"Hs_ScenEdit_SetMagazineWeaponCurrentLoad({{{self.guid},WPNREC_GUID='{weapon_rec_guid}',currentLoad={current_load}}})"
+            f"Hs_ScenEdit_SetMagazineWeaponCurrentLoad({{{self.guid},WPNREC_GUID='{weapon_db_id}',currentLoad={current_load}}})"
         )
         return response.lua_success
 
@@ -1321,20 +1320,19 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
-    @validate_uuid4_args(["weapon_rec_guid"])
-    async def set_weapon_current_load(self, weapon_rec_guid: str, number: int) -> bool:
+    async def set_weapon_current_load(self, weapon_db_id: str, number: int) -> bool:
         """
         设置挂架武器数量
 
         Args:
-            - weapon_rec_guid: 武器guid
+            - weapon_db_id: 武器guid
             - number: 数量
 
         Returns:
             - bool: 是否成功
         """
         response = await self.mozi_server.send_and_recv(
-            f"Hs_ScenEdit_SetWeaponCurrentLoad({{{self.guid},WPNREC_GUID='{weapon_rec_guid}',CURRENTLOAD={number}}})"
+            f"Hs_ScenEdit_SetWeaponCurrentLoad({{{self.guid},WPNREC_GUID='{weapon_db_id}',CURRENTLOAD={number}}})"
         )
         return response.lua_success
 
@@ -1430,19 +1428,18 @@ class CActiveUnit(Base):
         )
         return response.lua_success
 
-    @validate_uuid4_args(["weapon_rec_guid"])
-    async def remove_weapon(self, weapon_rec_guid: str) -> bool:
+    async def remove_weapon(self, weapon_db_id: str) -> bool:
         """
         通过武器属性删除单元的武器
 
         Args:
-            - weapon_rec_guid: 武器记录guid
+            - weapon_db_id: 武器记录guid
 
         Returns:
             - bool: 是否成功
         """
         response = await self.mozi_server.send_and_recv(
-            f"Hs_ScenEdit_RemoveWeapon({{unitname='{self.name}', WPNREC_GUID='{weapon_rec_guid}'}})"
+            f"Hs_ScenEdit_RemoveWeapon({{unitname='{self.name}', WPNREC_GUID='{weapon_db_id}'}})"
         )
         return response.lua_success
 
