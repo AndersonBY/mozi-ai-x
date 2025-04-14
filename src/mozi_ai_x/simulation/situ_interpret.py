@@ -540,9 +540,7 @@ class CActiveUnitDict:
         m_Doctrine = "string 条令的GUID"
         m_UnitWeapons = "string 系统右栏->对象信息->作战单元武器 内数据"
         m_WayPoints = "string 航路点GUID集合"
-        strWayPointDTG = "string 航路点剩余航行距离"
-        strWayPointTTG = "string 航路点剩余航行时间"
-        strWayPointFuel = "string 航路点需要燃油数"
+
         strActiveUnitStatus = "string 状态"
         m_ProficiencyLevel = "int 训练水平 (枚举量)"
         bIsEscortRole = "bool 是否是护卫角色"
@@ -603,9 +601,6 @@ class CActiveUnitDict:
         "m_Doctrine": "doctrine",
         "m_UnitWeapons": "unit_weapons",
         "m_WayPoints": "_way_points",
-        "strWayPointDTG": "way_point_dtg_description",
-        "strWayPointTTG": "way_point_ttg_description",
-        "strWayPointFuel": "way_point_fuel_description",
         "strActiveUnitStatus": "active_unit_status",
         "m_ProficiencyLevel": "proficiency_level",
         "bIsEscortRole": "is_escort_role",
@@ -704,9 +699,9 @@ class CGroupDict:
         m_UnitsInGroup = "string 编组所有单元"
         strWayPointName = "string 航路点名称"
         strWayPointDescription = "string 航路点描述"
-        WayPointDTG = "string 航路点剩余航行距离"
-        WayPointTTG = "string 航路点剩余航行时间"
-        WayPointFuel = "string 航路点需要燃油数"
+        strWayPointDTG = "string 航路点剩余航行距离"
+        strWayPointTTG = "string 航路点剩余航行时间"
+        strWayPointFuel = "string 航路点需要燃油数"
         iFormationSelectedIndex = "int 发送队形方案选择的索引"
         m_FormationFormula = "string 发送队形方案详情"
         strDockAircraft = "string 载机按钮的文本描述"
@@ -725,9 +720,9 @@ class CGroupDict:
         "m_UnitsInGroup": "units_in_group",
         "strWayPointName": "way_point_name",
         "strWayPointDescription": "way_point_description",
-        "WayPointDTG": "way_point_dtg",
-        "WayPointTTG": "way_point_ttg",
-        "WayPointFuel": "way_point_fuel",
+        "strWayPointDTG": "way_point_dtg_description",
+        "strWayPointTTG": "way_point_ttg_description",
+        "strWayPointFuel": "way_point_fuel_description",
         "iFormationSelectedIndex": "formation_selected_index",
         "m_FormationFormula": "formation_formula",
         "strDockAircraft": "dock_aircraft",
@@ -1418,9 +1413,9 @@ class CAircraftDict:
         m_bBoomRefuelling = "bool 是否可输油管加油"
         strWayPointName = "string 航路点名称"
         strWayPointDescription = "string 航路点描述"
-        WayPointDTG = "string 航路点剩余航行距离"
-        WayPointTTG = "string 航路点剩余航行时间"
-        WayPointFuel = "string 航路点需要燃油数"
+        strWayPointDTG = "string 航路点剩余航行距离"
+        strWayPointTTG = "string 航路点剩余航行时间"
+        strWayPointFuel = "string 航路点需要燃油数"
 
     var_map = {
         **CActiveUnitDict.var_map,
@@ -1457,9 +1452,9 @@ class CAircraftDict:
         "m_bBoomRefuelling": "boom_refuelling",
         "strWayPointName": "way_point_name",
         "strWayPointDescription": "way_point_description",
-        "WayPointDTG": "way_point_dtg",
-        "WayPointTTG": "way_point_ttg",
-        "WayPointFuel": "way_point_fuel",
+        "strWayPointDTG": "way_point_dtg_description",
+        "strWayPointTTG": "way_point_ttg_description",
+        "strWayPointFuel": "way_point_fuel_description",
     }
 
     class Labels(CActiveUnitDict.Labels):

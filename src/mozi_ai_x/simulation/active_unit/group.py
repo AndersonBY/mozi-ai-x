@@ -1,3 +1,4 @@
+import re
 from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
@@ -89,12 +90,12 @@ class CGroup(CActiveUnit):
         self.way_point_name = ""
         # 航路点描述
         self.way_point_description = ""
-        # # 航路点剩余航行距离
-        # self.way_point_dtg = ""
-        # # 航路点剩余航行时间
-        # self.way_point_ttg = ""
-        # # 航路点需要燃油数
-        # self.way_point_fuel = ""
+        # 航路点剩余航行距离描述
+        self.way_point_dtg_description = ""
+        # 航路点剩余航行时间描述
+        self.way_point_ttg_description = ""
+        # 航路点需要燃油数描述
+        self.way_point_fuel_description = ""
         # 发送队形方案选择的索引
         self.formation_selected_index = ""
         # 发送队形方案详情
@@ -105,6 +106,49 @@ class CGroup(CActiveUnit):
         self.dock_ship = ""
 
         self.var_map = CGroupDict.var_map
+
+    @property
+    def way_point_dtg(self) -> float:
+        """航路点剩余航行距离，单位：公里"""
+        numbers = re.findall(r"\d+\.?\d*", self.way_point_dtg_description)
+        return float(numbers[0]) if numbers else 0.0
+
+    @property
+    def way_point_ttg(self) -> int:
+        """航路点剩余航行时间，单位：秒"""
+        description = self.way_point_ttg_description
+        if not description:
+            return 0
+
+        total_seconds = 0
+        # 尝试匹配小时
+        hour_match = re.search(r"(\d+)\s*时", description)
+        if hour_match:
+            total_seconds += int(hour_match.group(1)) * 3600
+
+        # 尝试匹配分钟
+        minute_match = re.search(r"(\d+)\s*分", description)
+        if minute_match:
+            total_seconds += int(minute_match.group(1)) * 60
+
+        # 尝试匹配秒
+        second_match = re.search(r"(\d+)\s*秒", description)
+        if second_match:
+            total_seconds += int(second_match.group(1))
+
+        # 如果没有找到任何时间单位，尝试将整个字符串作为秒数解析
+        if total_seconds == 0:
+            numbers = re.findall(r"\d+", description)
+            if numbers:
+                total_seconds = int(numbers[0])
+
+        return total_seconds
+
+    @property
+    def way_point_fuel(self) -> float:
+        """航路点需要燃油数，单位：公斤"""
+        numbers = re.findall(r"\d+\.?\d*", self.way_point_fuel_description)
+        return float(numbers[0]) if numbers else 0.0
 
     def get_units(self):
         """
