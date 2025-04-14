@@ -63,8 +63,8 @@ class CWeapon(CActiveUnit):
             list: 删除的子对象列表
         """
         del_list = []
-        if self.doctrine is not None:
-            del_list.append(self.doctrine.guid)
+        if self.doctrine:
+            del_list.append(self.doctrine)
             del self.doctrine
 
         del_list.extend(self.way_points.keys())

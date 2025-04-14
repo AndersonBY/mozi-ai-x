@@ -117,7 +117,7 @@ class CActiveUnit(Base):
         # 分配的任务
         self.assigned_mission = ""
         # 作战条令
-        self.doctrine: "CDoctrine | None" = None
+        self.doctrine = ""
         # 系统右栏->对象信息->作战单元武器
         self.unit_weapons = ""
         # 路径点
