@@ -1,3 +1,4 @@
+import re
 from typing import TYPE_CHECKING, Literal, Any, Iterable
 
 if TYPE_CHECKING:
@@ -122,6 +123,12 @@ class CActiveUnit(Base):
         self.unit_weapons = ""
         # 路径点
         self._way_points = ""
+        # 航路点剩余航行距离描述
+        self.way_points_dtg_description = ""
+        # 航路点剩余航行时间描述
+        self.way_points_ttg_description = ""
+        # 航路点需要燃油数描述
+        self.way_points_fuel_description = ""
         # 训练水平
         self.proficiency_level = 0
         # 是否是护卫角色
@@ -188,6 +195,49 @@ class CActiveUnit(Base):
     @property
     def class_name(self) -> str:
         return self.__class__.__name__
+
+    @property
+    def way_points_dtg(self) -> float:
+        """航路点剩余航行距离，单位：公里"""
+        numbers = re.findall(r"\d+\.?\d*", self.way_points_dtg_description)
+        return float(numbers[0]) if numbers else 0.0
+
+    @property
+    def way_points_ttg(self) -> int:
+        """航路点剩余航行时间，单位：秒"""
+        description = self.way_points_ttg_description
+        if not description:
+            return 0
+
+        total_seconds = 0
+        # 尝试匹配小时
+        hour_match = re.search(r"(\d+)\s*时", description)
+        if hour_match:
+            total_seconds += int(hour_match.group(1)) * 3600
+
+        # 尝试匹配分钟
+        minute_match = re.search(r"(\d+)\s*分", description)
+        if minute_match:
+            total_seconds += int(minute_match.group(1)) * 60
+
+        # 尝试匹配秒
+        second_match = re.search(r"(\d+)\s*秒", description)
+        if second_match:
+            total_seconds += int(second_match.group(1))
+
+        # 如果没有找到任何时间单位，尝试将整个字符串作为秒数解析
+        if total_seconds == 0:
+            numbers = re.findall(r"\d+", description)
+            if numbers:
+                total_seconds = int(numbers[0])
+
+        return total_seconds
+
+    @property
+    def way_points_fuel(self) -> float:
+        """航路点需要燃油数，单位：公斤"""
+        numbers = re.findall(r"\d+\.?\d*", self.way_points_fuel_description)
+        return float(numbers[0]) if numbers else 0.0
 
     def get_assigned_mission(self):
         """

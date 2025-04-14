@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-
 from enum import Enum
 
 
@@ -540,6 +539,10 @@ class CActiveUnitDict:
         m_AssignedMission = "string 分配的任务GUID"
         m_Doctrine = "string 条令的GUID"
         m_UnitWeapons = "string 系统右栏->对象信息->作战单元武器 内数据"
+        m_WayPoints = "string 航路点GUID集合"
+        strWayPointDTG = "string 航路点剩余航行距离"
+        strWayPointTTG = "string 航路点剩余航行时间"
+        strWayPointFuel = "string 航路点需要燃油数"
         strActiveUnitStatus = "string 状态"
         m_ProficiencyLevel = "int 训练水平 (枚举量)"
         bIsEscortRole = "bool 是否是护卫角色"
@@ -599,6 +602,10 @@ class CActiveUnitDict:
         "m_AssignedMission": "assigned_mission",
         "m_Doctrine": "doctrine",
         "m_UnitWeapons": "unit_weapons",
+        "m_WayPoints": "_way_points",
+        "strWayPointDTG": "way_point_dtg_description",
+        "strWayPointTTG": "way_point_ttg_description",
+        "strWayPointFuel": "way_point_fuel_description",
         "strActiveUnitStatus": "active_unit_status",
         "m_ProficiencyLevel": "proficiency_level",
         "bIsEscortRole": "is_escort_role",
@@ -1508,7 +1515,7 @@ class CAircraftDict:
             9003: "0x0400204C RID:'8268'",
             9004: "自杀式无人机",
         }
-        air_ops_condition_str = {
+        air_ops_condition = {
             0: "空中",
             1: "停泊",
             2: "正在滑行准备起飞",

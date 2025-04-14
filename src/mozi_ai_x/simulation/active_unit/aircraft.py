@@ -45,7 +45,7 @@ class CAircraft(CActiveUnit):
         # 挂载方案的GUid
         self.loadout_guid = ""
         # 获取当前行动状态
-        self.air_ops_condition_str = 0
+        self.air_ops_condition = 0
         # 完成准备时间
         self.finish_prepare_time = ""
         # 快速出动信息
@@ -78,12 +78,12 @@ class CAircraft(CActiveUnit):
         self.way_point_name = ""
         # 航路点描述
         self.way_point_description = ""
-        # 航路点剩余航行距离
-        self.way_point_dtg = ""
-        # 航路点剩余航行时间
-        self.way_point_ttg = ""
-        # 航路点需要燃油数
-        self.way_point_fuel = ""
+        # # 航路点剩余航行距离
+        # self.way_point_dtg = ""
+        # # 航路点剩余航行时间
+        # self.way_point_ttg = ""
+        # # 航路点需要燃油数
+        # self.way_point_fuel = ""
         self.max_range = "0.0"
 
         self.var_map = CAircraftDict.var_map
@@ -91,6 +91,50 @@ class CAircraft(CActiveUnit):
     @property
     def loadout_obj(self):
         return self.situation.loadout_dict[self.loadout_guid]
+
+    @property
+    def type_name(self) -> str:
+        """战斗机/多用途飞机/..."""
+        return CAircraftDict.Labels.type[self.type]
+
+    @property
+    def category_name(self) -> str:
+        """固定翼/直升机/..."""
+        return CAircraftDict.Labels.category[self.category]
+
+    @property
+    def air_ops_condition_name(self) -> str:
+        """飞机状态：空中/停泊/..."""
+        return CAircraftDict.Labels.air_ops_condition[self.air_ops_condition]
+
+    @property
+    def maintenance_level_name(self) -> str:
+        """武器状态未知,或不考虑连发机关枪/武器状态已知,且考虑连发机关枪/..."""
+        return CAircraftDict.Labels.maintenance_level[self.maintenance_level]
+
+    @property
+    def status_type(self) -> Literal["valid_to_fly", "in_air", "in_air_rtb", "wait_ready"]:
+        """
+        获取飞机状态
+
+        Returns:
+            - str:
+                - 'valid_to_fly' - 在基地可马上部署飞行任务,
+                - 'in_air' - 在空中可部署巡逻，进攻，航路规划,
+                - 'in_air_rtb' - 在空中返航或降落,
+                - 'wait_ready' - 其他
+        """
+        if self.air_ops_condition in (1, 2, 4, 8, 9, 18, 23, 24, 26):
+            # 在基地可马上部署飞行任务
+            return "valid_to_fly"
+        elif self.air_ops_condition in (0, 13, 14, 15, 16, 19, 20, 21, 22):
+            # 在空中可部署巡逻，进攻，航路规划
+            return "in_air"
+        elif self.air_ops_condition in (5, 10, 11, 17, 25):
+            # 在空中返航或降落
+            return "in_air_rtb"
+        else:
+            return "wait_ready"
 
     # def get_valid_weapons(self):
     #     """
@@ -159,29 +203,6 @@ class CAircraft(CActiveUnit):
             "weapons_valid": self.get_weapon_infos(),
         }
         return info_dict
-
-    def get_status_type(self) -> str:
-        """
-        获取飞机状态
-
-        Returns:
-            - str:
-                - 'ValidToFly' - 在基地可马上部署飞行任务,
-                - 'InAir' - 在空中可部署巡逻，进攻，航路规划,
-                - 'InAirRTB' - 在空中返航或降落,
-                - 'WaitReady' - 其他
-        """
-        if self.air_ops_condition_str in (1, 2, 4, 8, 9, 18, 23, 24, 26):
-            # 在基地可马上部署飞行任务
-            return "ValidToFly"
-        elif self.air_ops_condition_str in (0, 13, 14, 15, 16, 19, 20, 21, 22):
-            # 在空中可部署巡逻，进攻，航路规划
-            return "InAir"
-        elif self.air_ops_condition_str in (5, 10, 11, 17, 25):
-            # 在空中返航或降落
-            return "InAirRTB"
-        else:
-            return "WaitReady"
 
     async def set_waypoint(self, latitude: float, longitude: float) -> bool:
         """

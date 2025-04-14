@@ -89,12 +89,12 @@ class CGroup(CActiveUnit):
         self.way_point_name = ""
         # 航路点描述
         self.way_point_description = ""
-        # 航路点剩余航行距离
-        self.way_point_dtg = ""
-        # 航路点剩余航行时间
-        self.way_point_ttg = ""
-        # 航路点需要燃油数
-        self.way_point_fuel = ""
+        # # 航路点剩余航行距离
+        # self.way_point_dtg = ""
+        # # 航路点剩余航行时间
+        # self.way_point_ttg = ""
+        # # 航路点需要燃油数
+        # self.way_point_fuel = ""
         # 发送队形方案选择的索引
         self.formation_selected_index = ""
         # 发送队形方案详情
