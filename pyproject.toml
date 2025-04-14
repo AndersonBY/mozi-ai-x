@@ -28,6 +28,9 @@ package-dir = "src"          # 声明包根目录为 src
 [tool.pdm.scripts]
 gen-proto = "python scripts/proto/gen_proto.py --output src/mozi_ai_x/simulation/proto"
 
+[tool.pdm.resolution]
+allow-prereleases = true
+
 [dependency-groups]
 dev = ["betterproto[compiler]>=2.0.0b6", "grpcio-tools>=1.70.0"]
 validator = ["libcst>=1.7.0"]
