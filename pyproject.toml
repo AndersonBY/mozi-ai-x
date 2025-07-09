@@ -11,11 +11,34 @@ license = { text = "MIT" }
 name = "mozi_ai_x"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "0.2.7"
+version = "0.3.0"
 
 [build-system]
 build-backend = "pdm.backend"
 requires = ["pdm-backend"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+  "E",  # pycodestyle errors
+  "W",  # pycodestyle warnings
+  "F",  # pyflakes
+  "I",  # isort
+  "B",  # flake8-bugbear
+  "C4", # flake8-comprehensions
+  "UP", # pyupgrade
+]
+
+ignore = ["E501", "I001"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
 
 [tool.pdm]
 distribution = true
@@ -32,7 +55,7 @@ gen-proto = "python scripts/proto/gen_proto.py --output src/mozi_ai_x/simulation
 allow-prereleases = true
 
 [dependency-groups]
-dev = ["betterproto[compiler]>=2.0.0b6", "grpcio-tools>=1.70.0"]
+dev = ["betterproto[compiler]>=2.0.0b6", "grpcio-tools>=1.70.0", "ruff>=0.12.2"]
 validator = ["libcst>=1.7.0"]
 
 [project.optional-dependencies]

@@ -38,7 +38,7 @@ class LuaScriptLoader:
 
         if script_name not in self._cache:
             file_path = Path(self.lua_path) / self._script_files[script_name]
-            with open(file_path, mode="r", encoding="ascii") as fp:
+            with open(file_path, encoding="ascii") as fp:
                 self._cache[script_name] = fp.read()
 
         return self._cache[script_name]

@@ -210,7 +210,7 @@ class CAircraft(CActiveUnit):
     #                     info[w_dbid] = w_record["wpn_current"]
     #     return info
 
-    def get_summary_info(self) -> dict:
+    async def get_summary_info(self) -> dict:
         """获取精简信息, 提炼信息进行决策
 
         Returns:
@@ -235,16 +235,16 @@ class CAircraft(CActiveUnit):
             "active_unit_status": self.active_unit_status,
             "fuel_state": self.fuel_state,
             "weaponstate": -1,
-            "mounts": self.get_mounts(),
-            "targeted_by": self.get_ai_targets(),
+            "mounts": await self.get_mounts(),
+            "targeted_by": await self.get_ai_targets(),
             "pitch": self.pitch,
             "roll": self.roll,
             "yaw": self.current_heading,
             "loadout": self.loadout_obj,
             "fuel": self.current_fuel_quantity,
             "damage": self.damage_state,
-            "sensors": self.get_sensors(),
-            "weapons_valid": self.get_weapon_infos(),
+            "sensors": await self.get_sensors(),
+            "weapons_valid": await self.get_weapon_infos(),
         }
         return info_dict
 
@@ -407,14 +407,6 @@ class CAircraft(CActiveUnit):
         immediately_go_str = str(immediately_go).lower()
         optional_weapon_str = str(optional_weapon).lower()
         ignore_weapon_str = str(ignore_weapon).lower()
-        lua_script = "Hs_ReadyImmediately('{}',{},{},{},{},{},{})".format(
-            self.guid,
-            loadout_db_id,
-            enable_quick_turnaround_str,
-            combo_box,
-            immediately_go_str,
-            optional_weapon_str,
-            ignore_weapon_str,
-        )
+        lua_script = f"Hs_ReadyImmediately('{self.guid}',{loadout_db_id},{enable_quick_turnaround_str},{combo_box},{immediately_go_str},{optional_weapon_str},{ignore_weapon_str})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success

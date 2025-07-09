@@ -1,4 +1,3 @@
-from typing import Union
 from .side import CSide
 from .active_unit.group import CGroup
 from .active_unit.submarine import CSubmarine
@@ -49,54 +48,54 @@ from .zone.nav import CNoNavZone
 from .zone.exclusion import CExclusionZone
 from .response import CResponse
 
-ObjectTypes = Union[
-    CSide,
-    CGroup,
-    CSubmarine,
-    CShip,
-    CFacility,
-    CAircraft,
-    CSatellite,
-    CSensor,
-    CLoadout,
-    CMount,
-    CDoctrine,
-    CMagazine,
-    CWeapon,
-    CUnguidedWeapon,
-    CWeaponImpact,
-    CSideWay,
-    CWayPoint,
-    CContact,
-    CLoggedMessage,
-    CSimEvent,
-    CTriggerUnitDetected,
-    CTriggerUnitDamaged,
-    CTriggerUnitDestroyed,
-    CTriggerPoints,
-    CTriggerTime,
-    CTriggerRegularTime,
-    CTriggerRandomTime,
-    CTriggerScenLoaded,
-    CTriggerUnitRemainsInArea,
-    CConditionScenHasStarted,
-    CConditionSidePosture,
-    CConditionLuaScript,
-    CActionMessage,
-    CActionPoints,
-    CActionTeleportInArea,
-    CActionChangeMissionStatus,
-    CActionEndScenario,
-    CActionLuaScript,
-    CPatrolMission,
-    CStrikeMission,
-    CSupportMission,
-    CCargoMission,
-    CFerryMission,
-    CMiningMission,
-    CMineClearingMission,
-    CReferencePoint,
-    CNoNavZone,
-    CExclusionZone,
-    CResponse,
-]
+ObjectTypes = (
+    CSide
+    | CGroup
+    | CSubmarine
+    | CShip
+    | CFacility
+    | CAircraft
+    | CSatellite
+    | CSensor
+    | CLoadout
+    | CMount
+    | CDoctrine
+    | CMagazine
+    | CWeapon
+    | CUnguidedWeapon
+    | CWeaponImpact
+    | CSideWay
+    | CWayPoint
+    | CContact
+    | CLoggedMessage
+    | CSimEvent
+    | CTriggerUnitDetected
+    | CTriggerUnitDamaged
+    | CTriggerUnitDestroyed
+    | CTriggerPoints
+    | CTriggerTime
+    | CTriggerRegularTime
+    | CTriggerRandomTime
+    | CTriggerScenLoaded
+    | CTriggerUnitRemainsInArea
+    | CConditionScenHasStarted
+    | CConditionSidePosture
+    | CConditionLuaScript
+    | CActionMessage
+    | CActionPoints
+    | CActionTeleportInArea
+    | CActionChangeMissionStatus
+    | CActionEndScenario
+    | CActionLuaScript
+    | CPatrolMission
+    | CStrikeMission
+    | CSupportMission
+    | CCargoMission
+    | CFerryMission
+    | CMiningMission
+    | CMineClearingMission
+    | CReferencePoint
+    | CNoNavZone
+    | CExclusionZone
+    | CResponse
+)

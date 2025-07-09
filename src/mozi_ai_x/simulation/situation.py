@@ -1,7 +1,7 @@
 import json
 import uuid
 import asyncio
-from typing import TYPE_CHECKING, Any, Dict, Type, List, Optional
+from typing import TYPE_CHECKING, Any
 
 from .doctrine import CDoctrine
 from .weather import CWeather
@@ -172,7 +172,7 @@ class HandlerRegistry:
     def register(
         self,
         class_name: str,
-        cls: Type,
+        cls: type,
         dict_name: str,
         obj_type: int,
         has_side: bool = False,
@@ -188,7 +188,7 @@ class HandlerRegistry:
         }
         self._type_mapping[obj_type] = {"dict": dict_name, "has_side": has_side}
 
-    def get_type_handler(self, obj_type: int) -> Optional[Dict]:
+    def get_type_handler(self, obj_type: int) -> dict | None:
         """
         根据对象类型代码获取处理信息
         参数：
@@ -335,75 +335,75 @@ class CSituation:
     def __init__(self, mozi_server: "MoziServer"):
         # 基础服务
         self.mozi_server = mozi_server
-        self.all_guid_info: Dict[str, Dict] = {}  # 所有GUID的元信息
-        self.all_guid: List[str] = []  # 全局GUID集合
-        self.all_guid_delete_info: Dict[str, Dict] = {}  # 最近删除的GUID信息
-        self.all_guid_add_info: Dict[str, Dict] = {}  # 新增GUID信息记录
+        self.all_guid_info: dict[str, dict] = {}  # 所有GUID的元信息
+        self.all_guid: list[str] = []  # 全局GUID集合
+        self.all_guid_delete_info: dict[str, dict] = {}  # 最近删除的GUID信息
+        self.all_guid_add_info: dict[str, dict] = {}  # 新增GUID信息记录
 
         # 对象存储初始化（与注册表严格对应）
-        self.doctrine_dict: Dict[str, CDoctrine] = {}
-        self.weather_dict: Dict[str, CWeather] = {}
-        self.side_dict: Dict[str, CSide] = {}
-        self.group_dict: Dict[str, CGroup] = {}
-        self.submarine_dict: Dict[str, CSubmarine] = {}
-        self.ship_dict: Dict[str, CShip] = {}
-        self.facility_dict: Dict[str, CFacility] = {}
-        self.aircraft_dict: Dict[str, CAircraft] = {}
-        self.satellite_dict: Dict[str, CSatellite] = {}
-        self.sensor_dict: Dict[str, CSensor] = {}
-        self.loadout_dict: Dict[str, CLoadout] = {}
-        self.mount_dict: Dict[str, CMount] = {}
-        self.magazine_dict: Dict[str, CMagazine] = {}
-        self.weapon_dict: Dict[str, CWeapon] = {}
-        self.unguided_weapon_dict: Dict[str, CUnguidedWeapon] = {}
-        self.weapon_impact_dict: Dict[str, CWeaponImpact] = {}
-        self.sideway_dict: Dict[str, CSideWay] = {}
-        self.waypoint_dict: Dict[str, CWayPoint] = {}
-        self.contact_dict: Dict[str, CContact] = {}
-        self.logged_messages_dict: Dict[str, CLoggedMessage] = {}
-        self.simevent_dict: Dict[str, CSimEvent] = {}
-        self.trigger_unit_detected_dict: Dict[str, CTriggerUnitDetected] = {}
-        self.trigger_unit_damaged_dict: Dict[str, CTriggerUnitDamaged] = {}
-        self.trigger_unit_destroyed_dict: Dict[str, CTriggerUnitDestroyed] = {}
-        self.trigger_points_dict: Dict[str, CTriggerPoints] = {}
-        self.trigger_time_dict: Dict[str, CTriggerTime] = {}
-        self.trigger_regular_time_dict: Dict[str, CTriggerRegularTime] = {}
-        self.trigger_random_time_dict: Dict[str, CTriggerRandomTime] = {}
-        self.trigger_scen_loaded_dict: Dict[str, CTriggerScenLoaded] = {}
-        self.trigger_unit_remains_in_area_dict: Dict[str, CTriggerUnitRemainsInArea] = {}
-        self.condition_scen_has_started_dict: Dict[str, CConditionScenHasStarted] = {}
-        self.condition_side_posture_dict: Dict[str, CConditionSidePosture] = {}
-        self.condition_lua_script_dict: Dict[str, CConditionLuaScript] = {}
-        self.action_message_dict: Dict[str, CActionMessage] = {}
-        self.action_points_dict: Dict[str, CActionPoints] = {}
-        self.action_teleport_in_area_dict: Dict[str, CActionTeleportInArea] = {}
-        self.action_change_mission_status_dict: Dict[str, CActionChangeMissionStatus] = {}
-        self.action_end_scenario_dict: Dict[str, CActionEndScenario] = {}
-        self.action_lua_script_dict: Dict[str, CActionLuaScript] = {}
-        self.mission_patrol_dict: Dict[str, CPatrolMission] = {}
-        self.mission_strike_dict: Dict[str, CStrikeMission] = {}
-        self.mission_support_dict: Dict[str, CSupportMission] = {}
-        self.mission_cargo_dict: Dict[str, CCargoMission] = {}
-        self.mission_ferry_dict: Dict[str, CFerryMission] = {}
-        self.mission_mining_dict: Dict[str, CMiningMission] = {}
-        self.mission_mine_clearing_mission_dict: Dict[str, CMineClearingMission] = {}
-        self.reference_point_dict: Dict[str, CReferencePoint] = {}
-        self.zone_no_nav_dict: Dict[str, CNoNavZone] = {}
-        self.zone_exclusion_dict: Dict[str, CExclusionZone] = {}
-        self.response_dict: Dict[str, CResponse] = {}
+        self.doctrine_dict: dict[str, CDoctrine] = {}
+        self.weather_dict: dict[str, CWeather] = {}
+        self.side_dict: dict[str, CSide] = {}
+        self.group_dict: dict[str, CGroup] = {}
+        self.submarine_dict: dict[str, CSubmarine] = {}
+        self.ship_dict: dict[str, CShip] = {}
+        self.facility_dict: dict[str, CFacility] = {}
+        self.aircraft_dict: dict[str, CAircraft] = {}
+        self.satellite_dict: dict[str, CSatellite] = {}
+        self.sensor_dict: dict[str, CSensor] = {}
+        self.loadout_dict: dict[str, CLoadout] = {}
+        self.mount_dict: dict[str, CMount] = {}
+        self.magazine_dict: dict[str, CMagazine] = {}
+        self.weapon_dict: dict[str, CWeapon] = {}
+        self.unguided_weapon_dict: dict[str, CUnguidedWeapon] = {}
+        self.weapon_impact_dict: dict[str, CWeaponImpact] = {}
+        self.sideway_dict: dict[str, CSideWay] = {}
+        self.waypoint_dict: dict[str, CWayPoint] = {}
+        self.contact_dict: dict[str, CContact] = {}
+        self.logged_messages_dict: dict[str, CLoggedMessage] = {}
+        self.simevent_dict: dict[str, CSimEvent] = {}
+        self.trigger_unit_detected_dict: dict[str, CTriggerUnitDetected] = {}
+        self.trigger_unit_damaged_dict: dict[str, CTriggerUnitDamaged] = {}
+        self.trigger_unit_destroyed_dict: dict[str, CTriggerUnitDestroyed] = {}
+        self.trigger_points_dict: dict[str, CTriggerPoints] = {}
+        self.trigger_time_dict: dict[str, CTriggerTime] = {}
+        self.trigger_regular_time_dict: dict[str, CTriggerRegularTime] = {}
+        self.trigger_random_time_dict: dict[str, CTriggerRandomTime] = {}
+        self.trigger_scen_loaded_dict: dict[str, CTriggerScenLoaded] = {}
+        self.trigger_unit_remains_in_area_dict: dict[str, CTriggerUnitRemainsInArea] = {}
+        self.condition_scen_has_started_dict: dict[str, CConditionScenHasStarted] = {}
+        self.condition_side_posture_dict: dict[str, CConditionSidePosture] = {}
+        self.condition_lua_script_dict: dict[str, CConditionLuaScript] = {}
+        self.action_message_dict: dict[str, CActionMessage] = {}
+        self.action_points_dict: dict[str, CActionPoints] = {}
+        self.action_teleport_in_area_dict: dict[str, CActionTeleportInArea] = {}
+        self.action_change_mission_status_dict: dict[str, CActionChangeMissionStatus] = {}
+        self.action_end_scenario_dict: dict[str, CActionEndScenario] = {}
+        self.action_lua_script_dict: dict[str, CActionLuaScript] = {}
+        self.mission_patrol_dict: dict[str, CPatrolMission] = {}
+        self.mission_strike_dict: dict[str, CStrikeMission] = {}
+        self.mission_support_dict: dict[str, CSupportMission] = {}
+        self.mission_cargo_dict: dict[str, CCargoMission] = {}
+        self.mission_ferry_dict: dict[str, CFerryMission] = {}
+        self.mission_mining_dict: dict[str, CMiningMission] = {}
+        self.mission_mine_clearing_mission_dict: dict[str, CMineClearingMission] = {}
+        self.reference_point_dict: dict[str, CReferencePoint] = {}
+        self.zone_no_nav_dict: dict[str, CNoNavZone] = {}
+        self.zone_exclusion_dict: dict[str, CExclusionZone] = {}
+        self.response_dict: dict[str, CResponse] = {}
 
         self.weather = None
 
         # 伪态势管理
-        self.pseudo_situ_all_guid: List[str] = []
-        self.pseudo_situ_all_name: List[str] = []
+        self.pseudo_situ_all_guid: list[str] = []
+        self.pseudo_situ_all_name: list[str] = []
         self.update_start: bool = False
 
         # 注册表实例（全功能版）
         self.registry = registry
         self.object_dict_map = self._build_object_dict_map()
 
-    def _build_object_dict_map(self) -> Dict[str, Dict]:
+    def _build_object_dict_map(self) -> dict[str, dict]:
         """完整的字典映射构建"""
         return {
             # 推演核心
@@ -488,7 +488,7 @@ class CSituation:
         response = await self.mozi_server.send_and_recv("GetAllState")
         self._parse_full_situation(json.loads(response.raw_data), scenario)
 
-    def _parse_full_situation(self, situation_data: Dict, scenario: "CScenario"):
+    def _parse_full_situation(self, situation_data: dict, scenario: "CScenario"):
         """解析完整态势"""
         for data in situation_data.values():
             if data["ClassName"] == "CCurrentScenario":
@@ -500,7 +500,7 @@ class CSituation:
             else:
                 self._parse_generic(data)
 
-    def _parse_generic(self, data: Dict):
+    def _parse_generic(self, data: dict):
         """通用对象解析逻辑"""
         handler = self.registry.get_handler(data["ClassName"])
         if not handler:
@@ -551,7 +551,7 @@ class CSituation:
         weather.parse(weather_json)
         self.weather = weather
 
-    def parse_delete(self, delete_json: Dict):
+    def parse_delete(self, delete_json: dict):
         """统一删除处理"""
         guid = delete_json["strGuid"]
         if guid not in self.all_guid_info:
@@ -583,7 +583,7 @@ class CSituation:
                 return new_guid
 
     @validate_uuid4_args(["guid"])
-    def get_obj_by_guid(self, guid: str) -> Optional[Any]:
+    def get_obj_by_guid(self, guid: str) -> Any | None:
         """GUID 全局查询"""
         if guid not in self.all_guid_info:
             return None
@@ -625,7 +625,7 @@ class CSituation:
         self.pseudo_situ_all_guid.clear()
         self.pseudo_situ_all_name.clear()
 
-    def _process_update_data(self, data: Dict, scenario: "CScenario"):
+    def _process_update_data(self, data: dict, scenario: "CScenario"):
         """处理更新数据"""
         for item_data in data.values():
             if item_data.get("ClassName") == "CCurrentScenario":
@@ -641,7 +641,7 @@ class CSituation:
             else:
                 mprint.error(f"未知的对象类型: {item_data}")
 
-    def _collect_changes(self) -> Dict:
+    def _collect_changes(self) -> dict:
         """收集变更信息"""
         return {
             "added": self.all_guid_add_info,

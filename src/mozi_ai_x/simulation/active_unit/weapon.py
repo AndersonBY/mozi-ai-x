@@ -55,7 +55,7 @@ class CWeapon(CActiveUnit):
 
         self.var_map = CWeaponDict.var_map
 
-    def delete_sub_object(self):
+    async def delete_sub_object(self):
         """
         删除时删除子对象
 
@@ -73,7 +73,7 @@ class CWeapon(CActiveUnit):
         del self.sensors
         return del_list
 
-    def get_summary_info(self) -> dict:
+    async def get_summary_info(self) -> dict:
         """
         获取精简信息, 提炼信息进行决策
 
@@ -91,7 +91,7 @@ class CWeapon(CActiveUnit):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "altitude": self.altitude_agl,
-            "course": self.get_way_points_info(),
+            "course": await self.get_way_points_info(),
             "heading": self.current_heading,
             "speed": self.current_speed,
             "throttle": self.current_throttle,
@@ -99,14 +99,14 @@ class CWeapon(CActiveUnit):
             "unitstate": self.active_unit_status,
             "fuelstate": "",
             "weaponstate": -1,
-            "mounts": self.get_mounts(),
+            "mounts": await self.get_mounts(),
             "target": self.primary_target_guid,
             "shooter": self.firing_unit_guid,
             "type": "Weapon",
             "fuel": -1,
             "damage": -1,
-            "sensors": self.get_sensors(),
-            "weapons_valid": self.get_weapon_infos(),
+            "sensors": await self.get_sensors(),
+            "weapons_valid": await self.get_weapon_infos(),
         }
         return info_dict
 
@@ -146,9 +146,7 @@ class CWeapon(CActiveUnit):
         return response.lua_success
 
     @validate_uuid4_args(["active_unit_guid", "contact_guid"])
-    async def set_weapon_way(
-        self, active_unit_guid: str, contact_guid: str, latitude: float, longitude: float
-    ) -> bool:
+    async def set_weapon_way(self, active_unit_guid: str, contact_guid: str, latitude: float, longitude: float) -> bool:
         """
         对可设置航路的武器在手动攻击时绘制武器的航线。
 

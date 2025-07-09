@@ -50,18 +50,18 @@ class CSide(Base):
         self.name = ""
         self.__zone_index_increment = 1  # 创建封锁区或禁航区的自增命名序号
         self.__reference_point_index_increment = 1  # 创建参考点的自增命名序号
-        self.missions: dict[str, "CMission"] = {}  # key:key:mission name, value: Mission instance
+        self.missions: dict[str, CMission] = {}  # key:key:mission name, value: Mission instance
         # 实体
-        self.aircrafts: dict[str, "CAircraft"] = {}  # key:unit guid, value: Unit instance
-        self.facilities: dict[str, "CFacility"] = {}  # key:unit guid, value: Unit instance
-        self.ships: dict[str, "CShip"] = {}
-        self.submarines: dict[str, "CSubmarine"] = {}
-        self.weapons: dict[str, "CWeapon"] = {}
-        self.satellites: dict[str, "CSatellite"] = {}
+        self.aircrafts: dict[str, CAircraft] = {}  # key:unit guid, value: Unit instance
+        self.facilities: dict[str, CFacility] = {}  # key:unit guid, value: Unit instance
+        self.ships: dict[str, CShip] = {}
+        self.submarines: dict[str, CSubmarine] = {}
+        self.weapons: dict[str, CWeapon] = {}
+        self.satellites: dict[str, CSatellite] = {}
         # 目标
-        self.contacts: dict[str, "CContact"] = {}  # key:contact guid, value, contact instance
+        self.contacts: dict[str, CContact] = {}  # key:contact guid, value, contact instance
         # 编组
-        self.groups: dict[str, "CGroup"] = {}
+        self.groups: dict[str, CGroup] = {}
         # 点
         self.action_points = {}
         # 参考点

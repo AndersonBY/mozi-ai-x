@@ -6,10 +6,10 @@
 from dataclasses import dataclass
 from typing import (
     TYPE_CHECKING,
-    AsyncIterator,
     Dict,
     Optional,
 )
+from collections.abc import AsyncIterator
 
 import betterproto
 import grpclib
@@ -38,7 +38,7 @@ class GRpcStub(betterproto.ServiceStub):
         self,
         grpc_request: "GrpcRequest",
         *,
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
         deadline: Optional["Deadline"] = None,
         metadata: Optional["MetadataLike"] = None,
     ) -> "GrpcReply":
@@ -55,7 +55,7 @@ class GRpcStub(betterproto.ServiceStub):
         self,
         grpc_request: "GrpcRequest",
         *,
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
         deadline: Optional["Deadline"] = None,
         metadata: Optional["MetadataLike"] = None,
     ) -> AsyncIterator[GrpcReply]:
@@ -91,7 +91,7 @@ class GRpcBase(ServiceBase):
             request,
         )
 
-    def __mapping__(self) -> Dict[str, grpclib.const.Handler]:
+    def __mapping__(self) -> dict[str, grpclib.const.Handler]:
         return {
             "/GRPC.gRPC/GrpcConnect": grpclib.const.Handler(
                 self.__rpc_grpc_connect,

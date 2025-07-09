@@ -5,7 +5,7 @@ from pathlib import Path
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
-from typing import Optional, Tuple, Any, cast, LiteralString
+from typing import Any, cast, LiteralString
 
 # 常量定义
 NM2KM = 1.852  # 海里转千米
@@ -122,8 +122,8 @@ class SQLiteBackend(DatabaseBackend):
 
     def __init__(self, config: DBConfig):
         super().__init__(config)
-        self._conn: Optional[sqlite3.Connection] = None
-        self._cursor: Optional[sqlite3.Cursor] = None
+        self._conn: sqlite3.Connection | None = None
+        self._cursor: sqlite3.Cursor | None = None
 
     def connect(self) -> sqlite3.Connection:
         if not self._conn:
@@ -154,9 +154,9 @@ class MySQLBackend(DatabaseBackend):
 
     def __init__(self, config: DBConfig):
         try:
-            import mysql.connector
-        except ImportError:
-            raise ImportError("MySQL support requires mysql-connector-python package")
+            import mysql.connector  # noqa: F401
+        except ImportError as e:
+            raise ImportError("MySQL support requires mysql-connector-python package") from e
         super().__init__(config)
         self._conn = None
         self._cursor = None
@@ -164,8 +164,8 @@ class MySQLBackend(DatabaseBackend):
     def connect(self) -> Any:
         try:
             import mysql.connector as mysql_db
-        except ImportError:
-            raise ImportError("MySQL support requires mysql-connector-python package")
+        except ImportError as e:
+            raise ImportError("MySQL support requires mysql-connector-python package") from e
         if not self._conn:
             self._conn = mysql_db.connect(
                 host=self.config.host,
@@ -197,18 +197,18 @@ class PostgreSQLBackend(DatabaseBackend):
 
     def __init__(self, config: DBConfig):
         try:
-            import psycopg
-        except ImportError:
-            raise ImportError("PostgreSQL support requires psycopg package")
+            import psycopg  # noqa: F401
+        except ImportError as e:
+            raise ImportError("PostgreSQL support requires psycopg package") from e
         super().__init__(config)
         self._conn = None
         self._cursor = None
 
     def connect(self) -> Any:
         try:
-            from psycopg.connection import Connection
-        except ImportError:
-            raise ImportError("PostgreSQL support requires psycopg package")
+            from psycopg.connection import Connection  # noqa: F401
+        except ImportError as e:
+            raise ImportError("PostgreSQL support requires psycopg package") from e
         if not self._conn:
             self._conn = Connection.connect(
                 host=self.config.host,
@@ -231,8 +231,8 @@ class PostgreSQLBackend(DatabaseBackend):
     def execute_query(self, query: str, params: tuple = ()) -> Any:
         try:
             from psycopg.sql import SQL
-        except ImportError:
-            raise ImportError("PostgreSQL support requires psycopg package")
+        except ImportError as e:
+            raise ImportError("PostgreSQL support requires psycopg package") from e
         if not self._cursor:
             self.connect()
         assert self._cursor is not None
@@ -272,7 +272,7 @@ class ModelDatabase:
         finally:
             self.backend.disconnect()
 
-    def get_weapon_info(self, weapon_id: int) -> Optional[WeaponInfo]:
+    def get_weapon_info(self, weapon_id: int) -> WeaponInfo | None:
         """获取武器信息"""
         query = """
             SELECT ID, Name, Type, AirRangeMin, AirRangeMax, LandRangeMin, LandRangeMax,
@@ -283,7 +283,7 @@ class ModelDatabase:
         result = self.backend.execute_query(query, (weapon_id,)).fetchone()
         return WeaponInfo.from_db_row(result) if result else None
 
-    def get_weapon_name_type(self, weapon_id: int) -> Tuple[str, int]:
+    def get_weapon_name_type(self, weapon_id: int) -> tuple[str, int]:
         """获取武器名称和类型"""
         query = "SELECT Name, Type FROM dataweapon WHERE ID = ?"
         result = self.backend.execute_query(query, (weapon_id,)).fetchone()
@@ -300,7 +300,7 @@ class ModelDatabase:
         _, weapon_type = self.get_weapon_name_type(weapon_id)
         return weapon_type not in WEAPONS_ASSIST
 
-    def get_model_info(self, category: str, db_id: int) -> Optional[ModelInfo]:
+    def get_model_info(self, category: str, db_id: int) -> ModelInfo | None:
         """获取模型信息"""
         if category not in {"aircraft", "facility", "weapon"}:
             return None

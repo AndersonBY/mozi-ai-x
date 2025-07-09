@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from .base import CMission
 from ..situ_interpret import CStrikeMissionDict
@@ -18,35 +18,35 @@ class CStrikeMission(CMission):
 
     def __init__(self, guid: str, mozi_server: "MoziServer", situation: "CSituation"):
         super().__init__(guid, mozi_server, situation)
-        self.use_flight_size_hard_limit_escort: Optional[bool] = None
-        self.use_group_size_hard_limit_escort: Optional[bool] = None
-        self.one_time_only: Optional[bool] = None
-        self.pre_planned_only: Optional[bool] = None
-        self.use_auto_planner: Optional[bool] = None
-        self.use_flight_size_hard_limit: Optional[bool] = None
-        self.use_group_size_hard_limit: Optional[bool] = None
-        self.empty_slots: Optional[int] = None
-        self.escort_response_radius: Optional[int] = None
-        self.min_response_radius: Optional[int] = None
-        self.max_response_radius: Optional[int] = None
-        self.bingo: Optional[float] = None
-        self.doctrine_escorts: Optional["CDoctrine"] = None
-        self.start_time: Optional[str] = None
-        self.end_time: Optional[str] = None
-        self.escort_flight_size: Optional[int] = None
-        self.escort_flight_size_no: Optional[int] = None
-        self.escort_group_size: Optional[int] = None
-        self.max_aircraft_to_fly_escort: Optional[int] = None
-        self.max_aircraft_to_fly_escort_no: Optional[int] = None
-        self.min_aircraft_req_escorts: Optional[int] = None
-        self.min_aircraft_req_escorts_no: Optional[int] = None
-        self.min_aircraft_req_strikers: Optional[int] = None
-        self.minimum_contact_stance_to_trigger: Optional[int] = None
-        self.radar_behaviour: Optional[int] = None
+        self.use_flight_size_hard_limit_escort: bool | None = None
+        self.use_group_size_hard_limit_escort: bool | None = None
+        self.one_time_only: bool | None = None
+        self.pre_planned_only: bool | None = None
+        self.use_auto_planner: bool | None = None
+        self.use_flight_size_hard_limit: bool | None = None
+        self.use_group_size_hard_limit: bool | None = None
+        self.empty_slots: int | None = None
+        self.escort_response_radius: int | None = None
+        self.min_response_radius: int | None = None
+        self.max_response_radius: int | None = None
+        self.bingo: float | None = None
+        self.doctrine_escorts: CDoctrine | None = None
+        self.start_time: str | None = None
+        self.end_time: str | None = None
+        self.escort_flight_size: int | None = None
+        self.escort_flight_size_no: int | None = None
+        self.escort_group_size: int | None = None
+        self.max_aircraft_to_fly_escort: int | None = None
+        self.max_aircraft_to_fly_escort_no: int | None = None
+        self.min_aircraft_req_escorts: int | None = None
+        self.min_aircraft_req_escorts_no: int | None = None
+        self.min_aircraft_req_strikers: int | None = None
+        self.minimum_contact_stance_to_trigger: int | None = None
+        self.radar_behaviour: int | None = None
         self.specific_targets: str = ""
-        self.strike_type: Optional[int] = None
-        self.contact_weapon_way_guid: Optional[str] = None
-        self.side_weapon_way_guid: Optional[str] = None
+        self.strike_type: int | None = None
+        self.contact_weapon_way_guid: str | None = None
+        self.side_weapon_way_guid: str | None = None
 
         self.var_map = CStrikeMissionDict.var_map
 
@@ -86,7 +86,7 @@ class CStrikeMission(CMission):
         Returns:
             bool: 执行结果
         """
-        targets_str = f"{{{','.join(f"'{k}'" for k in targets)}}}"
+        targets_str = f"{{{','.join(f'{k!r}' for k in targets)}}}"
         cmd = f"ScenEdit_AssignUnitAsTarget({targets_str}, '{self.name}')"
         self.mozi_server.throw_into_pool(cmd)
         response = await self.mozi_server.send_and_recv(cmd)
@@ -102,7 +102,7 @@ class CStrikeMission(CMission):
         Returns:
             bool: 执行结果
         """
-        targets_str = f"{{{','.join(f"'{i}'" for i in target_list)}}}"
+        targets_str = f"{{{','.join(f'{i!r}' for i in target_list)}}}"
         cmd = f"print(ScenEdit_AssignUnitAsTarget({targets_str}, '{self.name}'))"
         self.mozi_server.throw_into_pool(cmd)
         response = await self.mozi_server.send_and_recv(cmd)
@@ -118,7 +118,7 @@ class CStrikeMission(CMission):
         Returns:
             bool: 执行结果
         """
-        targets_str = f"{{{','.join(f"'{i}'" for i in target_list)}}}"
+        targets_str = f"{{{','.join(f'{i!r}' for i in target_list)}}}"
         cmd = f"print(ScenEdit_RemoveUnitAsTarget({targets_str}, '{self.name}'))"
         self.mozi_server.throw_into_pool(cmd)
         response = await self.mozi_server.send_and_recv(cmd)
@@ -149,9 +149,7 @@ class CStrikeMission(CMission):
         Returns:
             bool: 执行结果
         """
-        cmd = (
-            f"ScenEdit_SetMission('{self.side}','{self.name}',{{StrikeMinimumTrigger={strike_minimum_trigger.value}}})"
-        )
+        cmd = f"ScenEdit_SetMission('{self.side}','{self.name}',{{StrikeMinimumTrigger={strike_minimum_trigger.value}}})"
         self.mozi_server.throw_into_pool(cmd)
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success

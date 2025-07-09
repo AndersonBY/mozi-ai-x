@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 from grpclib import GRPCError
 from grpclib.const import Status
 
@@ -32,7 +32,7 @@ class ServerResponse:
         message: str = "OK",
         raw_data: str = "",
         data: Any = None,
-        error: Optional[Exception] = None,
+        error: Exception | None = None,
     ):
         self.status_code = status_code
         self.message = message
@@ -56,7 +56,7 @@ class ServerResponse:
         )
 
     @classmethod
-    def create_error(cls, status_code: int, raw_data: str = "", error: Optional[Exception] = None):
+    def create_error(cls, status_code: int, raw_data: str = "", error: Exception | None = None):
         """错误响应工厂方法"""
         return cls(
             status_code=status_code,

@@ -150,7 +150,7 @@ class CGroup(CActiveUnit):
         numbers = re.findall(r"\d+\.?\d*", self.way_point_fuel_description)
         return float(numbers[0]) if numbers else 0.0
 
-    def get_units(self):
+    async def get_units(self):
         """
         获取编组下单元
 
@@ -163,7 +163,7 @@ class CGroup(CActiveUnit):
             units_group[guid] = self.situation.get_obj_by_guid(guid)
         return units_group
 
-    def get_doctrine(self) -> "CDoctrine | None":
+    async def get_doctrine(self) -> "CDoctrine | None":
         """
         获取条令
 
@@ -235,10 +235,7 @@ class CGroup(CActiveUnit):
         Returns:
             bool, 是否成功
         """
-        lua_script = (
-            f"ScenEdit_SetFormation({{NAME='{unit_name}', TYPE='{area_type}', BEARING={bearing}, "
-            f"DISTANCE={distance}}})"
-        )
+        lua_script = f"ScenEdit_SetFormation({{NAME='{unit_name}', TYPE='{area_type}', BEARING={bearing}, DISTANCE={distance}}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 

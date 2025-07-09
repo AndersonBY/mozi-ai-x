@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Literal, Any, Iterable
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Literal, Any
 
 if TYPE_CHECKING:
     from ..server import MoziServer
@@ -189,7 +190,7 @@ class CActiveUnit(Base):
     def class_name(self) -> str:
         return self.__class__.__name__
 
-    def get_assigned_mission(self):
+    async def get_assigned_mission(self):
         """
         获取分配的任务
 
@@ -200,15 +201,15 @@ class CActiveUnit(Base):
             return None
         return self.situation.get_obj_by_guid(self.assigned_mission)
 
-    def get_original_detector_side(self) -> "CSide":
+    async def get_original_detector_side(self) -> "CSide":
         """获取单元所在方"""
         return self.situation.side_dict[self.side]
 
-    def get_par_group(self) -> "CGroup":
+    async def get_par_group(self) -> "CGroup":
         """获取父级编组"""
         return self.situation.group_dict[self.parent_group]
 
-    def get_docked_units(self) -> dict[str, "CSubmarine | CShip | CFacility | CAircraft | CSatellite"]:
+    async def get_docked_units(self) -> dict[str, "CSubmarine | CShip | CFacility | CAircraft | CSatellite"]:
         """
         获取停靠单元
 
@@ -231,7 +232,7 @@ class CActiveUnit(Base):
                 docked_units[guid] = self.situation.satellite_dict[guid]
         return docked_units
 
-    def get_doctrine(self) -> "CDoctrine | None":
+    async def get_doctrine(self) -> "CDoctrine | None":
         """获取单元条令"""
         if self.doctrine in self.situation.doctrine_dict:
             doctrine = self.situation.doctrine_dict[self.doctrine]
@@ -239,7 +240,7 @@ class CActiveUnit(Base):
             return doctrine
         return None
 
-    def get_weapon_db_guids(self) -> list[str]:
+    async def get_weapon_db_guids(self) -> list[str]:
         """
         获取编组内所有武器的数据库guid
 
@@ -253,7 +254,7 @@ class CActiveUnit(Base):
             lst1 = [k.split("$")[1] for k in lst]
         return lst1
 
-    def get_weapon_infos(self) -> list[list[str]]:
+    async def get_weapon_infos(self) -> list[list[str]]:
         """
         获取编组内所有武器的名称及数据库guid
 
@@ -268,7 +269,7 @@ class CActiveUnit(Base):
         lst1 = [k.split("$") for k in lst]
         return [x for x in lst1 if x != [""]]
 
-    def get_mounts(self) -> dict[str, "CMount"]:
+    async def get_mounts(self) -> dict[str, "CMount"]:
         """
         获取挂架信息
 
@@ -283,7 +284,7 @@ class CActiveUnit(Base):
                 mounts_dic[guid] = self.situation.mount_dict[guid]
         return mounts_dic
 
-    def get_loadouts(self) -> dict[str, "CLoadout"]:
+    async def get_loadouts(self) -> dict[str, "CLoadout"]:
         """
         获取挂载
 
@@ -297,7 +298,7 @@ class CActiveUnit(Base):
                 loadout_dic[guid] = self.situation.loadout_dict[guid]
         return loadout_dic
 
-    def get_magazines(self) -> dict[str, "CMagazine"]:
+    async def get_magazines(self) -> dict[str, "CMagazine"]:
         """
         获取弹药库
 
@@ -312,7 +313,7 @@ class CActiveUnit(Base):
                 magazines_dic[guid] = self.situation.magazine_dict[guid]
         return magazines_dic
 
-    def get_sensors(self) -> dict[str, "CSensor"]:
+    async def get_sensors(self) -> dict[str, "CSensor"]:
         """
         获取传感器
 
@@ -367,7 +368,7 @@ class CActiveUnit(Base):
             if not isinstance(point, Iterable) or len(point) != 2:
                 raise TypeError("Each point must be a tuple of (latitude, longitude)")
             lat, lon = point
-            if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float))):
+            if not (isinstance(lat, int | float) and isinstance(lon, int | float)):
                 raise TypeError("Coordinates must be numbers")
             if not (-90 <= lat <= 90 and -180 <= lon <= 180):
                 raise ValueError("Invalid coordinates")
@@ -381,7 +382,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
-    def get_way_points_info(self) -> list[dict[str, float | str]]:
+    async def get_way_points_info(self) -> list[dict[str, float | str]]:
         """
         获取本单元航路点信息
 
@@ -404,7 +405,7 @@ class CActiveUnit(Base):
                 )
         return way_points
 
-    def get_ai_targets(self) -> dict[str, "CContact"]:
+    async def get_ai_targets(self) -> dict[str, "CContact"]:
         """
         获取活动单元的 AI 目标集合
 
@@ -434,9 +435,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"Hs_UnitObeysEMCON('{self.guid}', {str(obey).lower()})")
         return response.lua_success
 
-    async def allocate_weapon_to_target(
-        self, target: str | tuple[float, float], weapon_db_guid: str, weapon_count: int
-    ) -> bool:
+    async def allocate_weapon_to_target(self, target: str | tuple[float, float], weapon_db_guid: str, weapon_count: int) -> bool:
         """
         单元手动攻击(打击情报目标), 或者纯方位攻击(打击一个位置)
 
@@ -512,7 +511,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success
 
-    async def delete_coursed_point(self, point_index: int | list[int], clear: bool = False) -> bool:
+    async def delete_coursed_point(self, point_index: int | list[int] | None = None, clear: bool = False) -> bool:
         """
         单元删除航路点
 
@@ -535,6 +534,8 @@ class CActiveUnit(Base):
                 for point in range(point_count - 1, -1, -1):
                     lua_script += f'Hs_UnitOperateCourse("{self.guid}",{point},0.0,0.0,"Delete")'
         else:
+            if not point_index:
+                raise ValueError("clear 为 False 时，point_index 参数不能为空")
             if isinstance(point_index, list):
                 if len(point_index) > 1 and point_index[-1] > point_index[0]:
                     point_index.reverse()
@@ -576,9 +577,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv(
-            f"Hs_HoldPositonSelectedUnit('{self.guid}',{str(hold).lower()})"
-        )
+        response = await self.mozi_server.send_and_recv(f"Hs_HoldPositonSelectedUnit('{self.guid}',{str(hold).lower()})")
         return response.lua_success
 
     async def leave_dock_alone(self) -> bool:
@@ -598,9 +597,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_AssignUnitToMission('{self.guid}','{mission_name}')"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_AssignUnitToMission('{self.guid}','{mission_name}')")
         return response.lua_success
 
     async def assign_unit_to_mission_escort(self, mission_name: str) -> bool:
@@ -613,9 +610,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_AssignUnitToMission('{self.guid}','{mission_name}',true)"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_AssignUnitToMission('{self.guid}','{mission_name}',true)")
         return response.lua_success
 
     async def cancel_assign_unit_to_mission(self) -> bool:
@@ -639,9 +634,7 @@ class CActiveUnit(Base):
             - bool: 是否成功
         example: set_unit_heading('016b72ba-2ab2-464a-a340-3cfbfb133ed1',30)
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_SetUnit({{guid ='{self.guid}' ,heading = {heading}}})"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_SetUnit({{guid ='{self.guid}' ,heading = {heading}}})")
         return response.lua_success
 
     @validate_uuid4_args(["contact_guid"])
@@ -655,9 +648,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_AttackContact('{self.guid}', '{contact_guid}', {{mode=0}})"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_AttackContact('{self.guid}', '{contact_guid}', {{mode=0}})")
         return response.lua_success
 
     async def set_desired_speed(self, desired_speed: int | float) -> bool:
@@ -694,9 +685,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_SetUnit({{guid='{self.guid}', throttle={enum_throttle}}})"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_SetUnit({{guid='{self.guid}', throttle={enum_throttle}}})")
         return response.lua_success
 
     async def set_radar_on(self, on: bool) -> bool:
@@ -1036,7 +1025,7 @@ class CActiveUnit(Base):
             # 处理接收的数据
             result_split = response.raw_data[6:-1].replace("'", "")
             result_join = ""
-            result_join = result_join.join([one for one in result_split.split("\n")])
+            result_join = result_join.join(result_split.split("\n"))
             lst = result_join.split(",")
             for keyValue in lst:
                 keyValue_list = keyValue.split("=")
@@ -1179,7 +1168,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv("Hs_SetFuelQty('{}','{}')".format(self.guid, remaining_fuel))
+        response = await self.mozi_server.send_and_recv(f"Hs_SetFuelQty('{self.guid}',{remaining_fuel})")
         return response.lua_success
 
     async def set_own_side(self, new_side: str) -> bool:
@@ -1406,9 +1395,7 @@ class CActiveUnit(Base):
         Returns:
             - bool: 是否成功
         """
-        response = await self.mozi_server.send_and_recv(
-            f"Hs_ScenEdit_RemoveMount({{{self.name},mount_guid='{mount_guid}'}})"
-        )
+        response = await self.mozi_server.send_and_recv(f"Hs_ScenEdit_RemoveMount({{{self.name},mount_guid='{mount_guid}'}})")
         return response.lua_success
 
     @validate_uuid4_args(["mount_guid"])
@@ -1464,8 +1451,7 @@ class CActiveUnit(Base):
             - bool: 是否成功
         """
         lua_script = (
-            f"HS_SetUnitDamage({{guid='{self.guid}',OVERALLDEMAGE={overall_damage},"
-            f"components={{'{component_guid}','{level}'}}}})"
+            f"HS_SetUnitDamage({{guid='{self.guid}',OVERALLDEMAGE={overall_damage},components={{'{component_guid}','{level}'}}}})"
         )
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
@@ -1503,8 +1489,6 @@ class CActiveUnit(Base):
                 - Ace-顶级
         """
         side = self.situation.side_dict[self.side]
-        lua_script = (
-            f"ScenEdit_SetSideOptions({{side='{side.name}', guid='{self.guid}', proficiency='{proficiency}'}})"
-        )
+        lua_script = f"ScenEdit_SetSideOptions({{side='{side.name}', guid='{self.guid}', proficiency='{proficiency}'}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success

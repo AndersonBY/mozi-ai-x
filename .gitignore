@@ -162,3 +162,5 @@ cython_debug/
 #.idea/
 
 pdm.lock
+mozi-ai-x-repomix.md
+repomix.config.json

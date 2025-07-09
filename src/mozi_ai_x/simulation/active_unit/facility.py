@@ -41,7 +41,7 @@ class CFacility(CActiveUnit):
 
         self.var_map = CFacilityDict.var_map
 
-    def get_summary_info(self):
+    async def get_summary_info(self):
         """
         获取精简信息, 提炼信息进行决策
 
@@ -60,7 +60,7 @@ class CFacility(CActiveUnit):
             "longitude": self.longitude,
             "altitude": self.altitude_agl,
             "altitude_asl": self.altitude_asl,
-            "course": self.get_way_points_info(),
+            "course": await self.get_way_points_info(),
             "heading": self.current_heading,
             "speed": self.current_speed,
             "throttle": self.current_throttle,
@@ -68,11 +68,11 @@ class CFacility(CActiveUnit):
             "unitstate": self.active_unit_status,
             "fuelstate": "",
             "weaponstate": -1,
-            "mounts": self.get_mounts(),
+            "mounts": await self.get_mounts(),
             "type": "Facility",
             "fuel": 0,
             "damage": self.damage_state,
-            "sensors": self.get_sensors(),
-            "weapons_valid": self.get_weapon_infos(),
+            "sensors": await self.get_sensors(),
+            "weapons_valid": await self.get_weapon_infos(),
         }
         return info_dict

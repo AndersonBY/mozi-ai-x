@@ -181,7 +181,7 @@ class MoziServer:
             mprint.warning(error_msg)
 
             if raise_error:
-                raise RuntimeError(error_msg)
+                raise RuntimeError(error_msg) from e
             return ServerResponse.create_error(status_code=1000, error=e)
 
     async def start(self):
@@ -269,9 +269,7 @@ class MoziServer:
                 load_success = True
                 break
 
-            mprint.warning(
-                f"想定还没有加载完毕，再等一秒！可能原因，1）时间太短；2）服务端没有想定{self.scenario_path}！"
-            )
+            mprint.warning(f"想定还没有加载完毕，再等一秒！可能原因，1）时间太短；2）服务端没有想定{self.scenario_path}！")
 
             await asyncio.sleep(1)
 
@@ -601,5 +599,5 @@ class MoziServer:
         try:
             with open(event_file, mode, encoding="utf-8") as f:
                 f.write(f"{key_event_str}\n")
-        except IOError as e:
+        except OSError as e:
             mprint.warning(f"写入事件文件失败: {e}")

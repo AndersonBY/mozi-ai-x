@@ -106,7 +106,7 @@ def get_range(range_km: float, delta_alt: float) -> float:
         float: KM
     """
     range_km *= 1000.0
-    return sqrt((range_km * range_km + delta_alt * delta_alt)) / 1000.0
+    return sqrt(range_km * range_km + delta_alt * delta_alt) / 1000.0
 
 
 def normal_angle(angle: float):
@@ -141,9 +141,7 @@ def get_azimuth(point1: tuple[float, float], point2: tuple[float, float]) -> flo
     return normal_angle(azimuth)
 
 
-def get_point_with_point_bearing_distance(
-    latitude: float, longitude: float, bearing: float, distance: float
-) -> GeoPoint:
+def get_point_with_point_bearing_distance(latitude: float, longitude: float, bearing: float, distance: float) -> GeoPoint:
     """
     一直一点求沿某一方向一段距离的点
 
@@ -305,7 +303,7 @@ def motion_dirc(
 
     motion_dict = {"forward": dic1, "middle": dic2, "backward": dic3}
     for k, v in motion_dict.items():
-        for point, j in v.items():
+        for _, j in v.items():
             for index, name in enumerate(j):
                 if len(name[2:]) == 1:
                     s = name[0:2] + "0" + str(name[2:])

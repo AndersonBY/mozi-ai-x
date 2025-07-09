@@ -245,7 +245,7 @@ class CDoctrine(Base):
             raise ValueError(f"无效的所有者类型: {type(owner)}")
 
         params_str = ", ".join(
-            f"{k} = {str(v).lower()}" if isinstance(v, bool) else f"{k} = '{v}'" for k, v in command_params.items()
+            f"{k} = {str(v).lower()}" if isinstance(v, bool) else f'{k} = "{v}"' for k, v in command_params.items()
         )
         return f"ScenEdit_SetDoctrine({base_cmd}, {{{params_str}}})"
 
@@ -366,9 +366,7 @@ class CDoctrine(Base):
         return await self._execute_doctrine_command(cmd)
 
     @validate_literal_args
-    async def set_ambiguous_targets_engaging_status(
-        self, status: Literal["Ignore", "Optimistic", "Pessimistic"]
-    ) -> bool:
+    async def set_ambiguous_targets_engaging_status(self, status: Literal["Ignore", "Optimistic", "Pessimistic"]) -> bool:
         """
         设置与模糊位置目标的交战状态
 
@@ -749,9 +747,7 @@ class CDoctrine(Base):
         return await self._execute_doctrine_command(cmd)
 
     @validate_literal_args
-    async def avoid_being_searched_for_submarine(
-        self, decision: Literal["No", "Yes_ExceptSelfDefence", "Yes_Always"]
-    ) -> bool:
+    async def avoid_being_searched_for_submarine(self, decision: Literal["No", "Yes_ExceptSelfDefence", "Yes_Always"]) -> bool:
         """
         设置是否规避搜索
 
@@ -768,9 +764,7 @@ class CDoctrine(Base):
         return await self._execute_doctrine_command(cmd)
 
     @validate_literal_args
-    async def dive_on_threat(
-        self, decision: Literal["Yes", "Yes_ESM_Only", "Yes_Ships20nm_Aircraft30nm", "No"]
-    ) -> bool:
+    async def dive_on_threat(self, decision: Literal["Yes", "Yes_ESM_Only", "Yes_Ships20nm_Aircraft30nm", "No"]) -> bool:
         """
         设置探测到威胁时是否下潜
 
