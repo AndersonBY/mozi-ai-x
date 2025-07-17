@@ -36,7 +36,7 @@ class CSubmarine(CActiveUnit):
         self.percentage_battery = 0.0
         # AIP剩余百分比
         self.percentage_aip = 0.0
-        self.type = {}
+        self.type: int = 0
         self.cavitation = ""
         self.hover_speed = 0.0  # 悬停
         self.low_speed = 0.0  # 低速

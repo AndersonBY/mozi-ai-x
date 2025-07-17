@@ -64,7 +64,7 @@ class MoziServer:
 
         # 命令池
         self.exect_flag = True
-        self.command_pool = []
+        self.command_pool: list[str] = []
         self.command_num = 0
 
         # 用于比赛，智能体关键事件文件绝对路径，用于判定智能体是否正常运行

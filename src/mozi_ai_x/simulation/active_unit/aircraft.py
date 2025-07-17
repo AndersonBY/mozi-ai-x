@@ -38,7 +38,7 @@ class CAircraft(CActiveUnit):
         # 加速
         self.add_force_speed = 0.0
         # 机型（战斗机，多用途，加油机...)
-        self.type = 0
+        self.type: int = 0
         # 宿主单元对象
         self.current_host_unit = ""
         # 挂载方案的DBID

@@ -180,7 +180,7 @@ class CActiveUnit(Base):
         # 状态
         self.active_unit_status = ""
 
-        self.type = ""
+        self.type: int
         self.subtype = ""
         self.guid = ""
         self.fuel_state = ""
@@ -391,7 +391,7 @@ class CActiveUnit(Base):
                 - 例子: [{'latitude': 26.0728267704942, 'longitude': 125.582813973341, 'Description': ' '},
                     {'latitude': 26.410343165174, 'longitude': 125.857575579442, 'Description': ' '}]
         """
-        way_points = []
+        way_points: list[dict[str, float | str]] = []
         if self._way_points != "":
             guid_list = self._way_points.split("@")
             for guid in guid_list:
@@ -1037,13 +1037,13 @@ class CActiveUnit(Base):
                     elif attr == "side":
                         active_unit.side = value
                     elif attr == "type":
-                        active_unit.type = value
+                        active_unit.type = int(value)
                     elif attr == "subtype":
                         active_unit.subtype = value
                     elif attr == "guid":
                         active_unit.guid = value
                     elif attr == "proficiency":
-                        active_unit.proficiency_level = value
+                        active_unit.proficiency_level = int(value)
                     elif attr == "latitude":
                         active_unit.latitude = float(value)
                     elif attr == "longitude":
@@ -1055,7 +1055,7 @@ class CActiveUnit(Base):
                     elif attr == "speed":
                         active_unit.current_speed = float(value)
                     elif attr == "throttle":
-                        active_unit.current_throttle = value
+                        active_unit.current_throttle = int(value)
                     elif attr == "autodetectable":
                         active_unit.auto_detectable = bool(value)
                     elif attr == "mounts":
