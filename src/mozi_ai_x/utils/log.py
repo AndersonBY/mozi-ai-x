@@ -12,7 +12,7 @@ class MPrint:
         # 从环境变量读取配置
         self.enable_console = os.getenv("MOZI_LOG_CONSOLE", "1").lower() in ("1", "true", "yes")
         self.enable_file = os.getenv("MOZI_LOG_FILE", "0").lower() in ("1", "true", "yes")
-        self.log_level = os.getenv("MOZI_LOG_LEVEL", "DEBUG").upper()
+        self.log_level = os.getenv("MOZI_LOG_LEVEL", "INFO").upper()
 
         # 设置日志
         self.logger = logging.getLogger(f"mozi_ai.{name}" if name else "mozi_ai")
