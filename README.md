@@ -22,6 +22,18 @@
 
 ## 安装
 
+### 快速安装（推荐）
+
+推荐使用 `pip` 直接从 PyPI 安装，无需从源码安装：
+
+```bash
+pip install mozi-ai-x
+```
+
+除非你需要本地开发或使用尚未发布的最新功能，否则无需从源码安装。
+
+### 从源码安装（如需本地开发）
+
 1.  **安装依赖:**
 
     ```bash
@@ -49,9 +61,9 @@
 
     注意：`GRPCServerBase.proto` 文件使用了 `package grpc;`, 并且 `gen_proto.py`会把生成的`py`文件中`/grpc.gRPC/`替换成`/GRPC.gRPC/`
 
-3.  **安装 mozi_ai_x (可选):**
+3.  **本地安装 mozi_ai_x:**
 
-    如果你想将 `mozi_ai_x` 安装为一个可导入的包，可以执行：
+    将仓库安装为可导入的包：
     ```bash
     pip install .
     ```
