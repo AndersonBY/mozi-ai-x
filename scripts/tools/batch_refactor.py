@@ -1,9 +1,7 @@
-import os
-import sys
 import argparse
 from pathlib import Path
 import libcst as cst
-from libcst import FunctionDef, Annotation, Decorator, Attribute, Arg, Name, SimpleString
+from libcst import FunctionDef, Decorator, Attribute, Name
 
 VALIDATOR_IMPORT_LINE = "from mozi_ai_x.utils.validator import validate_literal_args, validate_uuid4_args\n"
 

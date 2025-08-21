@@ -30,7 +30,7 @@ def main():
     ]
 
     print("正在执行命令：", " ".join(command))
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(command, capture_output=True, text=True)
 
     if result.returncode != 0:
         print("生成文件失败:")
@@ -42,7 +42,7 @@ def main():
     # 搜索生成文件里的内容，替换路径： /grpc.gRPC/ -> /GRPC.gRPC/
     # 墨子系统这里没注意处理大小写问题
     for file in Path(output_dir).glob("**/*.py"):
-        with open(file, "r", encoding="utf-8") as f:
+        with open(file, encoding="utf-8") as f:
             content = f.read()
         content = content.replace("/grpc.gRPC/", "/GRPC.gRPC/")
         with open(file, "w", encoding="utf-8") as f:
