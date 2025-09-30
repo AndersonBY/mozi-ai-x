@@ -71,4 +71,7 @@ class CShip(CActiveUnit):
         # 补给队列明显
         self.show_tanker = 0
 
+        self.dock_aircraft = ""  # 停靠飞机信息
+        self.dock_ship = ""  # 停靠舰船信息
+
         self.var_map = CShipDict.var_map

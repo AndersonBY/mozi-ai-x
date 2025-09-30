@@ -86,6 +86,10 @@ class CAircraft(CActiveUnit):
         # 航路点需要燃油数描述，示例1：需要燃油量: 71.9公斤(当前), 53.7公斤(期望)；示例2：需要燃油量: 6.9公斤
         self.way_point_fuel_description = ""
         self.max_range = "0.0"
+        self.air_ops_condition_str = ""  # 空中作战状态字符串
+        self.base_component = ""  # 基地组件
+        self.loadout_db_guid = ""  # 挂载配置数据库GUID
+        self.way_guid = ""  # 航路GUID
 
         self.var_map = CAircraftDict.var_map
 

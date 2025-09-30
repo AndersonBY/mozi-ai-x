@@ -22,6 +22,11 @@ mprint = mprint_with_name("Mozi Server")
 class MoziServer:
     """
     仿真服务类，墨子仿真服务器类
+
+    支持三种运行模式：
+    - standalone: 单机模式（默认），直接连接墨子服务器
+    - master: Master 模式，连接墨子 + 启动内置 API 服务供其他节点访问
+    - client: Client 模式，连接到 Master 节点，通过代理访问墨子
     """
 
     def __init__(
@@ -35,6 +40,8 @@ class MoziServer:
         platform_mode: Literal["versus", "development", "train", "eval"] = "development",
         agent_key_event_file: str | None = None,
         retry_times: int = 3,
+        mode: Literal["standalone", "master", "client"] = "standalone",
+        api_port: int = 6061,
     ):
         # 服务器IP
         self.server_ip = server_ip
@@ -73,6 +80,28 @@ class MoziServer:
 
         # 重试次数
         self.retry_times = retry_times
+
+        # 分布式模式相关
+        self.mode = mode
+        self.api_port = api_port
+        # 保留用于向后兼容
+        self.api_server = None
+        self.api_client = None
+        self.scenario: CScenario | None = None
+
+        # 根据模式初始化
+        if mode == "master":
+            from .distributed import MoziProxyServer
+
+            self.proxy_server = MoziProxyServer(self, api_port)
+            mprint.info(f"初始化为 Master 模式，代理端口: {api_port}")
+        elif mode == "client":
+            from .distributed import MoziProxyClient
+
+            self.proxy_client = MoziProxyClient(server_ip, server_port)
+            mprint.info(f"初始化为 Client 模式，连接到 Master 代理: {server_ip}:{server_port}")
+        else:
+            mprint.info("初始化为 Standalone 模式")
 
     async def connect_grpc_server(self) -> bool:
         """
@@ -118,6 +147,17 @@ class MoziServer:
         returns:
             ServerResponse: 包含响应状态和数据的对象
         """
+        # Client 模式：通过 Master 代理
+        if self.mode == "client":
+            if hasattr(self, 'proxy_client') and self.proxy_client and self.proxy_client.is_connected:
+                return await self.proxy_client.send_and_recv(cmd)
+            else:
+                mprint.warning("未连接到 Master 代理")
+                if raise_error:
+                    raise RuntimeError("未连接到 Master 代理")
+                return ServerResponse.create_error(1000, "未连接到 Master 代理")
+
+        # Master 或 Standalone 模式：直连墨子
         if not self.is_connected:
             if not await self.connect_grpc_server():
                 mprint.warning("连接墨子服务器失败")
@@ -186,6 +226,17 @@ class MoziServer:
 
     async def start(self):
         """启动墨子仿真服务端"""
+        # Client 模式：连接到 Master 代理
+        if self.mode == "client":
+            if hasattr(self, 'proxy_client'):
+                success = await self.proxy_client.connect()
+                if success:
+                    self.is_connected = True
+                else:
+                    mprint.error("✗ 连接 Master 代理失败")
+            return
+
+        # Master 或 Standalone 模式：连接墨子
         if self.platform == "windows":
             # 判断墨子是否已经启动
             is_mozi_server_started = False
@@ -227,6 +278,13 @@ class MoziServer:
             if self.agent_key_event_file:
                 self.write_key_event_string_to_file("成功连接墨子推演服务器！")
             mprint("成功连接墨子推演服务器！")
+
+            # Master 模式：启动 Mozi 代理服务
+            if self.mode == "master" and hasattr(self, 'proxy_server'):
+                try:
+                    await self.proxy_server.start()
+                except Exception as e:
+                    mprint.error(f"✗ 启动 Master 代理服务失败: {e}")
         else:
             mprint("连接墨子推演服务器失败（60秒）！")
 
@@ -252,6 +310,10 @@ class MoziServer:
         Returns:
             CScenario: 想定类对象
         """
+        # Client 模式：通过代理加载想定
+        if self.mode == "client":
+            mprint.info("Client 模式：通过 Master 代理加载想定")
+
         scenario_file = self.scenario_path
         loaded = False
         if self.platform == "windows":
@@ -279,7 +341,19 @@ class MoziServer:
             raise ValueError("想定加载失败")
 
         scenario = CScenario(self)
+        self.scenario = scenario
         return scenario
+
+    async def get_scenario(self) -> "CScenario":
+        """
+        获取想定对象
+
+        Returns:
+            CScenario: 想定类对象
+        """
+        if not self.scenario:
+            raise RuntimeError("想定未加载，请先调用 load_scenario()")
+        return self.scenario
 
     async def load_scenario_in_windows(self, scenario_path: str, edit_mode: bool) -> bool:
         """在 Windows 系统上加载想定。

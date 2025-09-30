@@ -186,6 +186,23 @@ class CActiveUnit(Base):
         self.fuel_state = ""
         self.weaponstate = ""
 
+        self.db_guid = ""  # 数据库GUID
+        self.current_alt = 0.0  # 当前高度 (与 altitude 相同但命名不同)
+        self.desired_alt = 0.0  # 期望高度 (与 altitude 相同但命名不同)
+        self.desired_speed_override = False  # 速度覆写
+        self.desired_altitude_override = False  # 高度覆写
+        self.ai_targets_can_fire = ""  # AI目标开火权限
+        self.pb_destroyed_width = 0.0  # 被摧毁进度条宽度
+        self.pb_heavy_damage_width = 0.0  # 重度损伤进度条宽度
+        self.pb_medium_damage_width = 0.0  # 中度损伤进度条宽度
+        self.pb_light_damage_width = 0.0  # 轻度损伤进度条宽度
+        self.pb_ok_width = 0.0  # 正常进度条宽度
+        self.hold_position = False  # 保持阵位
+        self.is_comms_online = False  # 通讯在线
+        self.is_escort_role = False  # 护卫角色
+        self.is_isolated_pov_object = False  # 孤立POV对象
+        self.is_regroup_needed = False  # 需要重组
+
     @property
     def class_name(self) -> str:
         return self.__class__.__name__
@@ -565,7 +582,7 @@ class CActiveUnit(Base):
         response = await self.mozi_server.send_and_recv(f"ScenEdit_SetUnit({{guid='{self.guid}',base='{base_guid}'}})")
         return response.lua_success
 
-    async def hold_position(self, hold: bool) -> bool:
+    async def hold_unit_position(self, hold: bool) -> bool:
         """
         命令面上指定单元设置是否保持阵位。 该接口暂不可用
 

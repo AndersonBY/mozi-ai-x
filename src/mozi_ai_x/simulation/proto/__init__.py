@@ -1,3 +1,3 @@
-from .grpc import GrpcRequest, GrpcReply, GRpcStub
+from .grpc import GrpcRequest, GrpcReply, GRpcStub, GRpcBase
 
-__all__ = ["GrpcRequest", "GrpcReply", "GRpcStub"]
+__all__ = ["GrpcRequest", "GrpcReply", "GRpcStub", "GRpcBase"]

@@ -68,6 +68,8 @@ class CScenario(BaseObject):
         # 态势
         self.situation = CSituation(mozi_server)
 
+        self.guid_str = ""  # GUID字符串形式 (映射到 strGuid)
+
         self.var_map = CCurrentScenarioDict.var_map
 
     @property

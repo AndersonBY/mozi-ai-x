@@ -37,6 +37,13 @@ class CCurrentScenarioDict:
         "strMeta_ScenSetting": "meta_scene_setting",
         "strDeclaredFeatures": "declared_features",
         "strCustomFileName": "custom_file_name",
+        "strGuid": "guid_str",
+        "iEditCountDown": "edit_count_down",
+        "iStartCountDown": "start_count_down",
+        "iSuspendCountDown": "suspend_count_down",
+        "m_CurrentStage": "current_stage",
+        "m_FirstTimeLastProcessed": "first_time_last_processed",
+        "m_grandTimeLastProcessed": "grand_time_last_processed",
     }
 
 
@@ -196,6 +203,9 @@ class CDoctrineDict:
         "bchkAttack": "recharge_attack_edit",
         "bchkAPI": "aip_edit",
         "bchkDippingSonar": "dipping_sonar_edit",
+        "m_WRA_WeaponRule_WeaponDBGUID": "weapon_rule_db_guid",
+        "m_bIsConsistenWithSuperiors": "is_consistent_with_superiors",
+        "m_fWeaponryWaitTime": "weaponry_wait_time",
     }
 
     class Labels:
@@ -491,6 +501,10 @@ class CSideDict:
         "strNeutralColorKey": "neutral_color_key",
         "strSideColorKey": "side_color_key",
         "strUnFriendlyColorKey": "unfriendly_color_key",
+        "iScoringDisaster": "scoring_disaster",
+        "iScoringTriumph": "scoring_triumph",
+        "strHostileColorKey": "hostile_color_key_correct",
+        "strUnfriendlyColorKey": "unfriendly_color_key_correct",
     }
 
     class Labels:
@@ -583,6 +597,7 @@ class CActiveUnitDict:
         "fMaxAltitude": "max_altitude",
         "fMinAltitude": "min_altitude",
         "iDBID": "db_id",
+        "strDBGUID": "db_guid",  # 数据库全局唯一标识符
         "bIsOperating": "operating",
         "m_ParentGroup": "parent_group",
         "m_DockedUnits": "docked_units",
@@ -619,6 +634,22 @@ class CActiveUnitDict:
         "m_MultipleMissionGUIDs": "multiple_mission_guids",
         "m_Magazines": "magazines",
         "m_HostActiveUnit": "host_active_unit",
+        # 战术控制字段
+        "bObeysEMCON": "obeys_emcon",
+        "bDesiredSpeedOverride": "desired_speed_override",
+        "bDesiredAltitudeOverride": "desired_altitude_override",
+        # AI 目标字段
+        "m_AITargets": "ai_targets",
+        "m_AITargetsCanFiretheTargetByWCSAndWeaponQty": "ai_targets_can_fire",
+        # 损伤状态进度条宽度字段
+        "dPBComponentsDestroyedWidth": "pb_destroyed_width",
+        "dPBComponentsHeavyDamageWidth": "pb_heavy_damage_width",
+        "dPBComponentsMediumDamageWidth": "pb_medium_damage_width",
+        "dPBComponentsLightDamageWidth": "pb_light_damage_width",
+        "dPBComponentsOKWidth": "pb_ok_width",
+        # UI 显示字段
+        "strCommonIcon": "common_icon",
+        "strIconType": "icon_type",
     }
 
     class Labels:
@@ -1004,6 +1035,12 @@ class CShipDict:
         "bCanRefuelOrUNREP": "can_refuel_or_unrep",
         "strShowTankerHeader": "show_tanker_header",
         "m_ShowTanker": "show_tanker",
+        "bSprintAndDrift": "sprint_and_drift",
+        "m_Bearing": "bearing",
+        "m_BearingType": "bearing_type",
+        "m_Distance": "distance",
+        "strDockAircraft": "dock_aircraft",
+        "strDockShip": "dock_ship",
     }
 
     class Labels(CActiveUnitDict.Labels):
@@ -1292,6 +1329,8 @@ class CFacilityDict:
         "strDockShip": "dock_ship",
         "m_CommandPost": "command_post",
         "m_ShowTanker": "show_tanker",
+        "bDockingOpsHasPier": "docking_ops_has_pier",
+        "fAddForceSpeed": "add_force_speed",
     }
 
     class Labels(CActiveUnitDict.Labels):
@@ -1454,6 +1493,9 @@ class CAircraftDict:
         "strWayPointDTG": "way_point_dtg_description",
         "strWayPointTTG": "way_point_ttg_description",
         "strWayPointFuel": "way_point_fuel_description",
+        "m_strWayGUID": "way_guid",
+        "BaseComponent": "base_component",
+        "strLoadoutDBGUID": "loadout_db_guid",
     }
 
     class Labels(CActiveUnitDict.Labels):
@@ -1658,6 +1700,9 @@ class CSensorDict:
         "i_TrackingTargetsWhenUsedAsDirector": "tracking_targets_when_used_as_director",
         "m_TrackingTargetsWhenUsedAsDirector": "tracking_targets_when_used_as_director",
         "m_SensorCapability": "sensor_capability",
+        "bManualOverride": "manual_override",
+        "fSensorDepth": "sensor_depth",
+        "strDBGUID": "db_guid",
     }
 
     class Labels:
@@ -1726,6 +1771,7 @@ class CLoadoutDict:
         "bQuickTurnaround": "quick_turnaround",
         "iMaxSorties": "max_sorties",
         "m_CargoType": "cargo_type",
+        "strDBGUID": "db_guid",
     }
 
     class Labels:
@@ -1758,6 +1804,7 @@ class CMountDict:
         "strName": "name",
         "strGuid": "guid",
         "iDBID": "db_id",
+        "strDBGUID": "db_guid",
         "m_ParentPlatform": "parent_platform",
         "m_ComponentStatus": "component_status",
         "m_DamageSeverity": "damage_severity",
@@ -1789,6 +1836,7 @@ class CMagazineDict:
         "strName": "name",
         "strGuid": "guid",
         "Idbid": "db_id",
+        "strDBGUID": "db_guid",
         "m_ParentPlatform": "parent_platform",
         "m_ComponentStatus": "component_status",
         "m_DamageSeverity": "damage_severity",
@@ -2042,6 +2090,12 @@ class CWayPointDict:
         "m_RadarState": "radar_state",
         "m_SonarState": "sonar_state",
         "m_ECMState": "ecm_state",
+        "m_SideWayGuid": "side_way_guid",
+        "strWayPointDTG": "way_point_dtg",
+        "strWayPointDescription": "way_point_description",
+        "strWayPointFuel": "way_point_fuel",
+        "strWayPointName": "way_point_name",
+        "strWayPointTTG": "way_point_ttg",
     }
 
     class Labels:
@@ -2183,6 +2237,9 @@ class CContactDict:
         "fSubsurfaceRangeMax": "subsurface_range_max",
         "m_EmissionContainer": "emission_container",
         "strContactEmissions": "contact_emissions",
+        "m_MatchingDBGUIDList": "matching_db_guid_list",
+        "strCommonIcon": "common_icon",
+        "strIconType": "icon_type",
     }
 
     class Labels:
@@ -2302,6 +2359,7 @@ class CTriggerUnitDetectedDict:
         "m_TargetType": "target_type",
         "iTargetSubType": "target_sub_type",
         "iSpecificUnitClass": "specific_unit_class",
+        "strSpecificUnitClass": "specific_unit_class_str",
         "m_SpecificUnit": "specific_unit",
         "strDetectorSideID": "detector_side_id",
         "m_identificationStatus": "identification_status",
@@ -3398,6 +3456,11 @@ class CStrikeMissionDict:
         "m_Doctrine_Escorts": "doctrine_escorts",
         "m_strContactWeaponWayGuid": "contact_weapon_way_guid",
         "iEmptySlots": "empty_slots",
+        "m_StartTime": "start_time",
+        "m_EndTime": "end_time",
+        "bPreinstallWayEndStrike": "preinstall_way_end_strike",
+        "m_MaxAircraftToFly_Strikers": "max_aircraft_to_fly_strikers",
+        "m_strSideRTBWayGUID": "side_rtb_way_guid",
     }
 
     class Labels(CMissionDict.Labels):
@@ -3449,6 +3512,19 @@ class CSupportMissionDict:
 
     var_map = {
         **CMissionDict.var_map,
+        "m_StartTime": "start_time",
+        "m_EndTime": "end_time",
+        "bA2AR_OneTankingCycleOnly": "a2ar_one_tanking_cycle_only",
+        "iA2AR_MaxNumberOfReceiversPerTanker": "a2ar_max_receivers_per_tanker",
+        "m_TankerMaxDistance_Airborne": "tanker_max_distance_airborne",
+        "m_MinAircraftReq": "min_aircraft_req",
+        "bAEOOS": "aeoos",
+        "bOTO": "oto",
+        "bOTR": "otr",
+        "iMNOS": "mnos",
+        "iNLT": "nlt",
+        "m_NavigationCourseReferencePoints": "navigation_course_reference_points",
+        "m_strSideRTBWayGUID": "side_rtb_way_guid",
     }
 
     class Labels(CMissionDict.Labels):

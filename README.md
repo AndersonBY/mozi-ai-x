@@ -11,6 +11,10 @@
 ## 特性
 
 *   **异步支持:** 基于 `asyncio` 和 `grpclib`，提供高性能的异步 API。
+*   **分布式支持 (NEW):** 内置 Master-Client 架构，支持多节点分布式访问
+    *   零配置：无需手动搭建服务器
+    *   API 透明：分布式和单机使用完全相同的 API
+    *   自动代理：Client 模式下所有操作自动通过 Master 代理
 *   **全面的 API:** 覆盖墨子系统的大部分功能，包括：
     *   态势感知 (获取单元、目标、环境信息等)
     *   单元控制 (移动、攻击、传感器控制、条令设置等)
@@ -75,10 +79,11 @@ pip install mozi-ai-x
 
 ## 快速开始 (示例)
 
+### 单机模式（传统用法）
+
 ```python
 import asyncio
-from mozi_ai_x.simulation.server import MoziServer
-from mozi_ai_x.simulation.scenario import CScenario
+from mozi_ai_x import MoziServer
 
 async def main():
     # 连接到墨子服务器 (需要先启动墨子服务端程序)
@@ -87,7 +92,7 @@ async def main():
 
     if server.is_connected:
         # 加载想定 (替换为你的想定文件路径)
-        scenario: CScenario = await server.load_scenario()
+        scenario = await server.load_scenario()
 
         if scenario:
             print(f"想定加载成功: {scenario.get_title()}")
@@ -119,9 +124,193 @@ async def main():
 asyncio.run(main())
 ```
 
+### 分布式模式（新功能）
+
+#### Master 节点（主控节点）
+
+```python
+import asyncio
+from mozi_ai_x import MoziServer
+
+async def main():
+    # Master 模式：连接墨子 + 启动 API 服务
+    master = MoziServer(
+        server_ip="127.0.0.1",
+        server_port=6060,
+        scenario_path="test.scen",
+        mode="master",      # 指定为 Master 模式
+        api_port=6061,      # API 服务端口
+    )
+
+    await master.start()
+    scenario = await master.load_scenario()
+
+    print(f"Master 已启动，API 端口: {master.api_port}")
+    print(f"想定: {scenario.get_title()}")
+
+    # 控制推演
+    await master.run_grpc_simulate()
+
+asyncio.run(main())
+```
+
+#### Client 节点（工作节点 - 红方）
+
+```python
+import asyncio
+from mozi_ai_x import MoziServer
+
+async def main():
+    # Client 模式：连接到 Master
+    client = MoziServer(
+        server_ip="192.168.1.100",  # Master 的 IP
+        server_port=6061,            # Master 的 API 端口
+        mode="client"                # 指定为 Client 模式
+    )
+
+    await client.start()
+
+    # 从 Master 获取想定（API 完全一致！）
+    scenario = await client.get_scenario()
+
+    # 控制红方（所有操作自动通过 Master 代理）
+    red_side = scenario.get_side_by_name("红方")
+    aircrafts = red_side.get_aircrafts()
+
+    # 设置飞机速度（会自动代理到墨子）
+    for guid, aircraft in aircrafts.items():
+        await aircraft.set_desired_speed(500)
+
+asyncio.run(main())
+```
+
+#### Client 节点（工作节点 - 蓝方）
+
+```python
+# 蓝方节点可以独立运行，与红方并行工作
+client = MoziServer(
+    server_ip="192.168.1.100",
+    server_port=6061,
+    mode="client"
+)
+
+await client.start()
+scenario = await client.get_scenario()
+
+# 控制蓝方
+blue_side = scenario.get_side_by_name("蓝方")
+# ... 蓝方的控制逻辑
+```
+
+### 运行分布式系统
+
+```bash
+# 1. 在主服务器上运行 Master
+python examples/distributed_master.py
+
+# 2. 在红方服务器上运行 Client
+python examples/distributed_client_red.py
+
+# 3. 在蓝方服务器上运行 Client
+python examples/distributed_client_blue.py
+```
+
+更多示例请查看 `examples/` 目录。
+
 ## API 文档
 
 更详细的 API 文档和用法示例，请参考代码中的 docstring 和后续补充的文档。
+
+## 分布式功能详解
+
+### 架构说明
+
+```
+┌─────────────┐
+│ Mozi Server │ (墨子仿真服务器)
+└──────┬──────┘
+       │ gRPC (6060)
+       │
+┌──────▼──────────────────────┐
+│  MoziServer (Master Mode)   │  主节点
+│  - 连接墨子                  │
+│  - 加载想定                  │
+│  - 控制推演                  │
+│  - 内置 API 服务 (6061)     │
+└──────┬──────────────────────┘
+       │ Network
+       │
+   ┌───┴────┬─────────┬────────┐
+   │        │         │        │
+┌──▼──┐ ┌──▼──┐  ┌──▼──┐  ┌──▼──┐
+│ 红方 │ │ 蓝方 │  │监控 │  │分析 │  工作节点
+│Client│ │Client│  │Client│  │Client│
+└─────┘ └─────┘  └─────┘  └─────┘
+```
+
+### 三种运行模式
+
+1. **standalone** (默认)
+   - 传统单机模式
+   - 直接连接墨子
+   - 向后兼容，不影响现有代码
+
+2. **master**
+   - 连接墨子服务器
+   - 负责想定加载和推演控制
+   - 自动启动内置 API 服务
+   - 为 Client 节点提供代理访问
+
+3. **client**
+   - 连接到 Master 节点
+   - 通过 Master 代理访问墨子
+   - API 完全一致，无需修改代码
+   - 支持多个 Client 并行运行
+
+### 使用场景
+
+#### 场景 1：多人协同开发
+```
+Master 节点（共享服务器）：加载想定，控制推演
+Client 节点（开发者A）：开发红方智能体
+Client 节点（开发者B）：开发蓝方智能体
+Client 节点（开发者C）：监控和分析
+```
+
+#### 场景 2：分布式 AI 训练
+```
+Master 节点：管理训练环境
+Client 节点 1-N：并行运行多个智能体实例
+```
+
+#### 场景 3：红蓝对抗
+```
+Master 节点：控制推演进度
+Client 节点（红方服务器）：红方决策系统
+Client 节点（蓝方服务器）：蓝方决策系统
+Client 节点（裁判服务器）：监控和评分
+```
+
+### 关键特性
+
+✅ **零配置**：无需手动搭建 gRPC 服务器，MoziServer 内置
+✅ **API 透明**：分布式和单机使用完全相同的 API
+✅ **自动代理**：Client 的所有操作自动转发到 Master
+✅ **向后兼容**：不影响现有单机代码
+✅ **易于扩展**：可以轻松添加认证、加密、负载均衡等功能
+
+### 注意事项
+
+1. **proto 文件生成**：首次使用需要生成分布式 API 的 proto 文件
+   ```bash
+   pdm run gen-proto
+   ```
+
+2. **网络配置**：确保 Master 的 API 端口（默认 6061）可被 Client 访问
+
+3. **性能考虑**：Client 通过网络代理，会有轻微延迟
+
+4. **安全性**：当前版本未加密，生产环境建议使用 VPN 或添加 TLS
 
 ## 贡献
 

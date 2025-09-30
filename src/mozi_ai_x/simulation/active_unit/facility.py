@@ -39,6 +39,8 @@ class CFacility(CActiveUnit):
         # 加油队列明细
         self.show_tanker = ""
 
+        self.docking_ops_has_pier = False  # 停靠操作是否有码头
+
         self.var_map = CFacilityDict.var_map
 
     async def get_summary_info(self):
