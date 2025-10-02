@@ -232,6 +232,21 @@ class MoziServer:
                 success = await self.proxy_client.connect()
                 if success:
                     self.is_connected = True
+                    response = await self.send_and_recv("GetAllState")
+                    scenario = CScenario(self)
+                    self.scenario = scenario
+                    # 解析态势数据
+                    if response.raw_data and response.raw_data != "脚本执行出错":
+                        import json
+
+                        try:
+                            situation_data = json.loads(response.raw_data)
+                            scenario.situation._parse_full_situation(situation_data, scenario)
+                            print("✓ 态势数据解析完成")
+                        except Exception as e:
+                            print(f"✗ 态势数据解析失败: {e}")
+                    else:
+                        print("✗ 没有获取到有效的态势数据")
                 else:
                     mprint.error("✗ 连接 Master 代理失败")
             return

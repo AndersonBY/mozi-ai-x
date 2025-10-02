@@ -4,7 +4,7 @@ Mozi AI X - Asynchronous SDK for Mozi Simulation Platform
 Provides asynchronous Python API for interacting with Mozi simulation platform.
 """
 
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 
 # Core service classes
 from .simulation.server import MoziServer, ServerResponse

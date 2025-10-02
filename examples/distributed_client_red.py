@@ -41,29 +41,10 @@ async def main():
     # 通过代理获取当前想定信息
     print("✓ 已连接到代理，可以执行命令")
 
-    # 初始化态势（获取完整态势信息）
-    print("\n获取态势信息...")
-    response = await client.send_and_recv("GetAllState")
-    print("✓ 态势信息获取完成")
-
-    # 创建本地 scenario 对象并解析态势数据
-    from mozi_ai_x.simulation.scenario import CScenario
-
-    scenario = CScenario(client)
-    client.scenario = scenario
-
-    # 解析态势数据
-    if response.raw_data and response.raw_data != "脚本执行出错":
-        import json
-
-        try:
-            situation_data = json.loads(response.raw_data)
-            scenario.situation._parse_full_situation(situation_data, scenario)
-            print("✓ 态势数据解析完成")
-        except Exception as e:
-            print(f"✗ 态势数据解析失败: {e}")
-    else:
-        print("✗ 没有获取到有效的态势数据")
+    scenario = client.scenario
+    if not scenario:
+        print("为获取到态势信息。")
+        return
 
     sides = scenario.sides
     print(f"想定中共有 {len(sides)} 个参演方:")

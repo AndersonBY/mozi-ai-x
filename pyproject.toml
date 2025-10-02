@@ -1,5 +1,5 @@
 [project]
-authors = [{ name = "Anderson", email = "andersonby@163.com" }]
+authors = [{name = "Anderson", email = "andersonby@163.com"}]
 dependencies = [
   "betterproto>=2.0.0b6",
   "psutil>=6.1.1",
@@ -7,11 +7,11 @@ dependencies = [
   "numpy>=2.2.2",
 ]
 description = "Mozi AI async version"
-license = { text = "MIT" }
+license = {text = "MIT"}
 name = "mozi_ai_x"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "0.3.4"
+version = "0.3.5"
 
 [build-system]
 build-backend = "pdm.backend"
@@ -23,11 +23,11 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = [
-  "E",  # pycodestyle errors
-  "W",  # pycodestyle warnings
-  "F",  # pyflakes
-  "I",  # isort
-  "B",  # flake8-bugbear
+  "E", # pycodestyle errors
+  "W", # pycodestyle warnings
+  "F", # pyflakes
+  "I", # isort
+  "B", # flake8-bugbear
   "C4", # flake8-comprehensions
   "UP", # pyupgrade
 ]
@@ -35,18 +35,17 @@ select = [
 ignore = ["E501", "I001"]
 
 [tool.ruff.format]
-quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
-
+quote-style = "double"
 
 [tool.pdm]
 distribution = true
 
 [tool.pdm.build]
-excludes = ["tests"]
-includes = ["src/mozi_ai_x"] # 显式包含包代码        
-package-dir = "src"          # 声明包根目录为 src
+excludes = ["tests"] 
+includes = ["src/mozi_ai_x"] # 显式包含包代码         
+package-dir = "src" # 声明包根目录为 src
 
 [tool.pdm.scripts]
 gen-proto = "python scripts/proto/gen_proto.py --output src/mozi_ai_x/simulation/proto"
@@ -59,5 +58,5 @@ dev = ["betterproto[compiler]>=2.0.0b6", "grpcio-tools>=1.70.0", "ruff>=0.12.2"]
 validator = ["libcst>=1.7.0"]
 
 [project.optional-dependencies]
-psycopg = ["psycopg[binary,pool]"]
 mysql = ["mysql-connector-python"]
+psycopg = ["psycopg[binary,pool]"]
