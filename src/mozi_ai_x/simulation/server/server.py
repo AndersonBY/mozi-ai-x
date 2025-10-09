@@ -149,7 +149,7 @@ class MoziServer:
         """
         # Client 模式：通过 Master 代理
         if self.mode == "client":
-            if hasattr(self, 'proxy_client') and self.proxy_client and self.proxy_client.is_connected:
+            if hasattr(self, "proxy_client") and self.proxy_client and self.proxy_client.is_connected:
                 return await self.proxy_client.send_and_recv(cmd)
             else:
                 mprint.warning("未连接到 Master 代理")
@@ -228,7 +228,7 @@ class MoziServer:
         """启动墨子仿真服务端"""
         # Client 模式：连接到 Master 代理
         if self.mode == "client":
-            if hasattr(self, 'proxy_client'):
+            if hasattr(self, "proxy_client"):
                 success = await self.proxy_client.connect()
                 if success:
                     self.is_connected = True
@@ -295,7 +295,7 @@ class MoziServer:
             mprint("成功连接墨子推演服务器！")
 
             # Master 模式：启动 Mozi 代理服务
-            if self.mode == "master" and hasattr(self, 'proxy_server'):
+            if self.mode == "master" and hasattr(self, "proxy_server"):
                 try:
                     await self.proxy_server.start()
                 except Exception as e:

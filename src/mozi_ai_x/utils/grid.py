@@ -81,9 +81,7 @@ class Grid:
         return lon_idx, lat_idx, alt_idx
 
     @classmethod
-    def get_position(
-        cls, longitude_index: int, latitude_index: int, altitude_index: int
-    ) -> tuple[float, float, float] | None:
+    def get_position(cls, longitude_index: int, latitude_index: int, altitude_index: int) -> tuple[float, float, float] | None:
         """获取网格索引对应的中心位置
 
         Args:
@@ -179,11 +177,7 @@ class Grid:
 
         if longitude_index < cls.LEFT_LON_COUNT:
             return cls.MIN_LONGITUDE + longitude_index * cls.DEGREE_UNIT + cls.DEGREE_UNIT / 2
-        return (
-            cls.MID_LONGITUDE
-            + (longitude_index - cls.LEFT_LON_COUNT) * cls.DEGREE_UNIT_SPARSE
-            + cls.DEGREE_UNIT_SPARSE / 2
-        )
+        return cls.MID_LONGITUDE + (longitude_index - cls.LEFT_LON_COUNT) * cls.DEGREE_UNIT_SPARSE + cls.DEGREE_UNIT_SPARSE / 2
 
     @classmethod
     def _get_latitude(cls, latitude_index: int) -> float | None:
@@ -286,9 +280,7 @@ class Grid:
         grid_ids = []
         for altitude in cls.ALTITUDE_BANDS:
             grid_ids.extend(
-                cls.get_grids_in_rectangle(
-                    cls.MAX_LATITUDE, cls.MIN_LATITUDE, cls.MIN_LONGITUDE, cls.MAX_LONGITUDE, altitude
-                )
+                cls.get_grids_in_rectangle(cls.MAX_LATITUDE, cls.MIN_LATITUDE, cls.MIN_LONGITUDE, cls.MAX_LONGITUDE, altitude)
             )
         return grid_ids
 
@@ -339,10 +331,7 @@ class Grid:
         new_lon_idx = min_lon_idx + lon_delta
 
         # 处理边界情况
-        if (
-            0 <= new_lat_idx < cls.LAT_UNIT_COUNT - area.shape[0]
-            and 0 <= new_lon_idx < cls.LEFT_LON_COUNT - area.shape[1]
-        ):
+        if 0 <= new_lat_idx < cls.LAT_UNIT_COUNT - area.shape[0] and 0 <= new_lon_idx < cls.LEFT_LON_COUNT - area.shape[1]:
             new_area = area
         else:
             new_area = cls._adjust_area_boundaries(area, new_lat_idx, new_lon_idx)
@@ -351,9 +340,7 @@ class Grid:
             return new_area, (new_lat_idx, new_lon_idx)
         else:
             all_area = np.zeros((cls.LAT_UNIT_COUNT, cls.LON_UNIT_COUNT), dtype=np.int8)
-            all_area[new_lat_idx : new_lat_idx + new_area.shape[0], new_lon_idx : new_lon_idx + new_area.shape[1]] = (
-                new_area
-            )
+            all_area[new_lat_idx : new_lat_idx + new_area.shape[0], new_lon_idx : new_lon_idx + new_area.shape[1]] = new_area
             return all_area, (new_lat_idx, new_lon_idx)
 
     @classmethod
@@ -468,12 +455,8 @@ class Grid:
 
         # 中等范围处理
         elif max_axis_unit_count < 56:
-            lon_grid_len_up = math.cos((location[0] + 1 / 60) * degree2radian) * (
-                cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT
-            )
-            lon_grid_len_down = math.cos((location[0] - 1 / 60) * degree2radian) * (
-                cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT
-            )
+            lon_grid_len_up = math.cos((location[0] + 1 / 60) * degree2radian) * (cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT)
+            lon_grid_len_down = math.cos((location[0] - 1 / 60) * degree2radian) * (cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT)
             lon_grid_len_up *= lon_grid_len_up
             lon_grid_len_down *= lon_grid_len_down
 
@@ -521,12 +504,8 @@ class Grid:
 
         # 大范围处理
         else:
-            lon_grid_len_up = math.cos((location[0] + 1 / 60) * degree2radian) * (
-                cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT
-            )
-            lon_grid_len_down = math.cos((location[0] - 1 / 60) * degree2radian) * (
-                cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT
-            )
+            lon_grid_len_up = math.cos((location[0] + 1 / 60) * degree2radian) * (cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT)
+            lon_grid_len_down = math.cos((location[0] - 1 / 60) * degree2radian) * (cls.LAT_DEGREE_DISTANCE * cls.DEGREE_UNIT)
             lon_grid_len_up *= lon_grid_len_up
             lon_grid_len_down *= lon_grid_len_down
 

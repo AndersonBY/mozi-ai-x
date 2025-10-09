@@ -614,9 +614,7 @@ class CSide(Base):
             latitude = float(latitude)
         if isinstance(longitude, int):
             longitude = float(longitude)
-        lua_script = (
-            f"ScenEdit_SetReferencePoint({{side='{self.name}',name='{name}', lat={latitude}, lon={longitude}}})"
-        )
+        lua_script = f"ScenEdit_SetReferencePoint({{side='{self.name}',name='{name}', lat={latitude}, lon={longitude}}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
@@ -1026,9 +1024,7 @@ class CSide(Base):
         Returns:
             bool: 执行结果
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_SetEMCON('{object_type}','{object_name}','{emcon}')"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_SetEMCON('{object_type}','{object_name}','{emcon}')")
         return response.lua_success
 
     async def add_reference_point(self, name: str, latitude: float, longitude: float) -> "CReferencePoint | None":
@@ -1391,9 +1387,7 @@ class CSide(Base):
         Returns:
             bool: 执行结果
         """
-        response = await self.mozi_server.send_and_recv(
-            f"Hs_PlanWayIsShow('{self.guid}','{way_name_or_id}',{str(show).lower()})"
-        )
+        response = await self.mozi_server.send_and_recv(f"Hs_PlanWayIsShow('{self.guid}','{way_name_or_id}',{str(show).lower()})")
         return response.lua_success
 
     async def rename_plan_way(self, way_name_or_id: str, new_name: str) -> bool:
@@ -1407,9 +1401,7 @@ class CSide(Base):
         Returns:
             bool: 执行结果
         """
-        response = await self.mozi_server.send_and_recv(
-            f"Hs_RenamePlanWay('{self.guid}','{way_name_or_id}','{new_name}')"
-        )
+        response = await self.mozi_server.send_and_recv(f"Hs_RenamePlanWay('{self.guid}','{way_name_or_id}','{new_name}')")
         return response.lua_success
 
     async def add_plan_way_point(self, way_name_or_id: str, latitude: float, longitude: float) -> bool:
@@ -1992,9 +1984,7 @@ class CSide(Base):
         Returns:
             bool: 执行结果
         """
-        response = await self.mozi_server.send_and_recv(
-            f"Hs_SideScoring('{self.guid}',{defeat_threshold},{victory_threshold})"
-        )
+        response = await self.mozi_server.send_and_recv(f"Hs_SideScoring('{self.guid}',{defeat_threshold},{victory_threshold})")
         return response.lua_success
 
     async def copy_unit(self, unit_name: str, latitude: float, longitude: float) -> bool:

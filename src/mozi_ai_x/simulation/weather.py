@@ -45,9 +45,7 @@ class CWeather(BaseObject):
         Returns:
             bool: 执行结果
         """
-        response = await self.mozi_server.send_and_recv(
-            f"ScenEdit_SetWeather({temperature},{rainfall},{undercloud},{seastate})"
-        )
+        response = await self.mozi_server.send_and_recv(f"ScenEdit_SetWeather({temperature},{rainfall},{undercloud},{seastate})")
         return response.lua_success
 
     async def get_weather(self) -> dict:

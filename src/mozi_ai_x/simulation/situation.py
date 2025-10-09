@@ -228,9 +228,7 @@ registry.register("CLoadout", CLoadout, "loadout_dict", ObjectType.LOADOUT)
 registry.register("CMount", CMount, "mount_dict", ObjectType.MOUNT)
 registry.register("CMagazine", CMagazine, "magazine_dict", ObjectType.MAGAZINE)
 registry.register("CWeapon", CWeapon, "weapon_dict", ObjectType.WEAPON, has_side=True)
-registry.register(
-    "CUnguidedWeapon", CUnguidedWeapon, "unguided_weapon_dict", ObjectType.UNGUIDED_WEAPON, has_side=True
-)
+registry.register("CUnguidedWeapon", CUnguidedWeapon, "unguided_weapon_dict", ObjectType.UNGUIDED_WEAPON, has_side=True)
 registry.register("CWeaponImpact", CWeaponImpact, "weapon_impact_dict", ObjectType.WEAPON_IMPACT)
 
 # 路径与导航
@@ -247,20 +245,14 @@ registry.register("CLoggedMessage", CLoggedMessage, "logged_messages_dict", Obje
 registry.register("CSimEvent", CSimEvent, "simevent_dict", ObjectType.SIM_EVENT)
 
 # 触发器系统（完整注册）
-registry.register(
-    "CTriggerUnitDetected", CTriggerUnitDetected, "trigger_unit_detected_dict", ObjectType.TRIGGER_UNIT_DETECTED
-)
-registry.register(
-    "CTriggerUnitDamaged", CTriggerUnitDamaged, "trigger_unit_damaged_dict", ObjectType.TRIGGER_UNIT_DAMAGED
-)
+registry.register("CTriggerUnitDetected", CTriggerUnitDetected, "trigger_unit_detected_dict", ObjectType.TRIGGER_UNIT_DETECTED)
+registry.register("CTriggerUnitDamaged", CTriggerUnitDamaged, "trigger_unit_damaged_dict", ObjectType.TRIGGER_UNIT_DAMAGED)
 registry.register(
     "CTriggerUnitDestroyed", CTriggerUnitDestroyed, "trigger_unit_destroyed_dict", ObjectType.TRIGGER_UNIT_DESTROYED
 )
 registry.register("CTriggerPoints", CTriggerPoints, "trigger_points_dict", ObjectType.TRIGGER_POINTS)
 registry.register("CTriggerTime", CTriggerTime, "trigger_time_dict", ObjectType.TRIGGER_TIME)
-registry.register(
-    "CTriggerRegularTime", CTriggerRegularTime, "trigger_regular_time_dict", ObjectType.TRIGGER_REGULAR_TIME
-)
+registry.register("CTriggerRegularTime", CTriggerRegularTime, "trigger_regular_time_dict", ObjectType.TRIGGER_REGULAR_TIME)
 registry.register("CTriggerRandomTime", CTriggerRandomTime, "trigger_random_time_dict", ObjectType.TRIGGER_RANDOM_TIME)
 registry.register("CTriggerScenLoaded", CTriggerScenLoaded, "trigger_scen_loaded_dict", ObjectType.TRIGGER_SCEN_LOADED)
 registry.register(
@@ -280,9 +272,7 @@ registry.register(
 registry.register(
     "CConditionSidePosture", CConditionSidePosture, "condition_side_posture_dict", ObjectType.CONDITION_SIDE_POSTURE
 )
-registry.register(
-    "CConditionLuaScript", CConditionLuaScript, "condition_lua_script_dict", ObjectType.CONDITION_LUA_SCRIPT
-)
+registry.register("CConditionLuaScript", CConditionLuaScript, "condition_lua_script_dict", ObjectType.CONDITION_LUA_SCRIPT)
 
 # 动作系统
 registry.register("CActionMessage", CActionMessage, "action_message_dict", ObjectType.ACTION_MESSAGE)
@@ -302,9 +292,7 @@ registry.register("CActionLuaScript", CActionLuaScript, "action_lua_script_dict"
 # 任务系统
 registry.register("CPatrolMission", CPatrolMission, "mission_patrol_dict", ObjectType.PATROL_MISSION, has_side=True)
 registry.register("CStrikeMission", CStrikeMission, "mission_strike_dict", ObjectType.STRIKE_MISSION, has_side=True)
-registry.register(
-    "CSupportMission", CSupportMission, "mission_support_dict", ObjectType.SUPPORT_MISSION, has_side=True
-)
+registry.register("CSupportMission", CSupportMission, "mission_support_dict", ObjectType.SUPPORT_MISSION, has_side=True)
 registry.register("CCargoMission", CCargoMission, "mission_cargo_dict", ObjectType.CARGO_MISSION, has_side=True)
 registry.register("CFerryMission", CFerryMission, "mission_ferry_dict", ObjectType.FERRY_MISSION, has_side=True)
 registry.register("CMiningMission", CMiningMission, "mission_mining_dict", ObjectType.MINING_MISSION, has_side=True)
@@ -317,9 +305,7 @@ registry.register(
 )
 
 # 地理要素
-registry.register(
-    "CReferencePoint", CReferencePoint, "reference_point_dict", ObjectType.REFERENCE_POINT, has_side=True
-)
+registry.register("CReferencePoint", CReferencePoint, "reference_point_dict", ObjectType.REFERENCE_POINT, has_side=True)
 registry.register("CNoNavZone", CNoNavZone, "zone_no_nav_dict", ObjectType.NO_NAV_ZONE, has_side=True)
 registry.register("CExclusionZone", CExclusionZone, "zone_exclusion_dict", ObjectType.EXCLUSION_ZONE, has_side=True)
 

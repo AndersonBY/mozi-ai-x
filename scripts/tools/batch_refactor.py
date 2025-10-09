@@ -113,11 +113,7 @@ def patch_file(path: Path, write_changes: bool = False):
             import difflib
 
             print(
-                "".join(
-                    difflib.unified_diff(
-                        code.splitlines(True), out_code.splitlines(True), fromfile="before", tofile="after"
-                    )
-                )
+                "".join(difflib.unified_diff(code.splitlines(True), out_code.splitlines(True), fromfile="before", tofile="after"))
             )
         changed = True
     return changed

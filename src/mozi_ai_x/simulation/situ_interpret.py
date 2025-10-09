@@ -3405,9 +3405,7 @@ class CStrikeMissionDict:
         bUseAutoPlanner = "bool 飞机设置-多扇面攻击(任务AI自动生成) 是否选中"
         bOneTimeOnly = "bool 飞机设置-仅限一次 是否选中"
         m_GroupSize = "int 水面舰艇/潜艇设置-编队规模，返回选中项的值   "
-        bUseGroupSizeHardLimit = (
-            "bool 水面舰艇/潜艇设置-水面舰艇或潜艇数低于编队规模要求不能出击(根据基地进行编组)  是否选中 "
-        )
+        bUseGroupSizeHardLimit = "bool 水面舰艇/潜艇设置-水面舰艇或潜艇数低于编队规模要求不能出击(根据基地进行编组)  是否选中 "
         bPrePlannedOnly = "bool 仅考虑计划目标(在目标) 是否选中"
         m_Doctrine = "string 作战条令的GUID"
         m_SpecificTargets = "string 水面舰艇/潜艇设置- 目标清单 返回清单的guid集合"
@@ -3422,9 +3420,7 @@ class CStrikeMissionDict:
         m_MaxAircraftToFlyEscortNo = "int 飞机设置-非火力打击-飞行任务允许最大护航数"
         bUseFlightSizeHardLimitEscort = "bool 飞机设置-飞机数低于编组规模数要求不能起飞 (根据基地、类型或者挂载编组)"
         m_EscortGroupSize = "int 水面舰艇/潜艇设置 -编组规模"
-        bUseGroupSizeHardLimitEscort = (
-            "bool 水面舰艇/潜艇设置-水面舰艇或潜艇数低于编队规模要求不能出击(根据基地进行编组)"
-        )
+        bUseGroupSizeHardLimitEscort = "bool 水面舰艇/潜艇设置-水面舰艇或潜艇数低于编队规模要求不能出击(根据基地进行编组)"
         m_Doctrine_Escorts = "string 护航的作战条令GUID"
         m_strContactWeaponWayGuid = "string 武器预设的打击航线"
         iEmptySlots = "int "

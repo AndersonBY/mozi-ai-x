@@ -141,19 +141,11 @@ class CMission(Base):
         weapon_record = []
         lst02 = []
         if len(assigned_units_guids) > 0:
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.submarines.items() if k in assigned_units_guids})
-            )
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.submarines.items() if k in assigned_units_guids}))
             weapon_record.extend(list({v.unit_weapons: k for k, v in side.ships.items() if k in assigned_units_guids}))
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.facilities.items() if k in assigned_units_guids})
-            )
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.aircrafts.items() if k in assigned_units_guids})
-            )
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.satellites.items() if k in assigned_units_guids})
-            )
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.facilities.items() if k in assigned_units_guids}))
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.aircrafts.items() if k in assigned_units_guids}))
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.satellites.items() if k in assigned_units_guids}))
             for unit_weapon_record in weapon_record:
                 if unit_weapon_record:
                     lst01 = unit_weapon_record.split("@")
@@ -182,19 +174,11 @@ class CMission(Base):
         weapon_record = []
         lst04 = []
         if len(assigned_units_guids) > 0:
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.submarines.items() if k in assigned_units_guids})
-            )
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.submarines.items() if k in assigned_units_guids}))
             weapon_record.extend(list({v.unit_weapons: k for k, v in side.ships.items() if k in assigned_units_guids}))
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.facilities.items() if k in assigned_units_guids})
-            )
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.aircrafts.items() if k in assigned_units_guids})
-            )
-            weapon_record.extend(
-                list({v.unit_weapons: k for k, v in side.satellites.items() if k in assigned_units_guids})
-            )
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.facilities.items() if k in assigned_units_guids}))
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.aircrafts.items() if k in assigned_units_guids}))
+            weapon_record.extend(list({v.unit_weapons: k for k, v in side.satellites.items() if k in assigned_units_guids}))
             for unit_weapon_record in weapon_record:
                 if unit_weapon_record:
                     lst01 = unit_weapon_record.split("@")
@@ -433,9 +417,7 @@ class CMission(Base):
         Returns:
             bool: 执行结果
         """
-        response = await self.mozi_server.send_and_recv(
-            f"Hs_AddPlanWayToMission('{self.name}',{way_type},'{way_name_or_id}')"
-        )
+        response = await self.mozi_server.send_and_recv(f"Hs_AddPlanWayToMission('{self.name}',{way_type},'{way_name_or_id}')")
         return response.lua_success
 
     async def add_plan_way_to_target(self, way_name_or_id: str, target_name_or_id: str) -> bool:

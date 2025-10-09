@@ -51,9 +51,7 @@ class ServerResponse:
     @classmethod
     def create_success(cls, raw_data: str = "", data: Any = None):
         """成功响应工厂方法"""
-        return cls(
-            status_code=Status.OK.value, message=cls.STATUS_CODES[Status.OK.value], raw_data=raw_data, data=data
-        )
+        return cls(status_code=Status.OK.value, message=cls.STATUS_CODES[Status.OK.value], raw_data=raw_data, data=data)
 
     @classmethod
     def create_error(cls, status_code: int, raw_data: str = "", error: Exception | None = None):

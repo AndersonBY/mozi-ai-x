@@ -40,7 +40,7 @@ class GRpcStub(betterproto.ServiceStub):
         *,
         timeout: float | None = None,
         deadline: Optional["Deadline"] = None,
-        metadata: Optional["MetadataLike"] = None
+        metadata: Optional["MetadataLike"] = None,
     ) -> "GrpcReply":
         return await self._unary_unary(
             "/GRPC.gRPC/GrpcConnect",
@@ -57,7 +57,7 @@ class GRpcStub(betterproto.ServiceStub):
         *,
         timeout: float | None = None,
         deadline: Optional["Deadline"] = None,
-        metadata: Optional["MetadataLike"] = None
+        metadata: Optional["MetadataLike"] = None,
     ) -> AsyncIterator[GrpcReply]:
         async for response in self._unary_stream(
             "/GRPC.gRPC/GrpcConnectStream",
@@ -71,26 +71,19 @@ class GRpcStub(betterproto.ServiceStub):
 
 
 class GRpcBase(ServiceBase):
-
     async def grpc_connect(self, grpc_request: "GrpcRequest") -> "GrpcReply":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
 
-    async def grpc_connect_stream(
-        self, grpc_request: "GrpcRequest"
-    ) -> AsyncIterator[GrpcReply]:
+    async def grpc_connect_stream(self, grpc_request: "GrpcRequest") -> AsyncIterator[GrpcReply]:
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
         yield GrpcReply()
 
-    async def __rpc_grpc_connect(
-        self, stream: "grpclib.server.Stream[GrpcRequest, GrpcReply]"
-    ) -> None:
+    async def __rpc_grpc_connect(self, stream: "grpclib.server.Stream[GrpcRequest, GrpcReply]") -> None:
         request = await stream.recv_message()
         response = await self.grpc_connect(request)
         await stream.send_message(response)
 
-    async def __rpc_grpc_connect_stream(
-        self, stream: "grpclib.server.Stream[GrpcRequest, GrpcReply]"
-    ) -> None:
+    async def __rpc_grpc_connect_stream(self, stream: "grpclib.server.Stream[GrpcRequest, GrpcReply]") -> None:
         request = await stream.recv_message()
         await self._call_rpc_handler_server_stream(
             self.grpc_connect_stream,

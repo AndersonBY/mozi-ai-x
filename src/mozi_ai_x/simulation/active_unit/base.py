@@ -222,6 +222,46 @@ class CActiveUnit(Base):
         """获取单元所在方"""
         return self.situation.side_dict[self.side]
 
+    async def get_fired_weapons(self) -> list[dict[str, str | float]]:
+        """获取单元发射的所有武器及其状态"""
+        fired_weapons = []
+
+        # 检查制导武器
+        for weapon_guid, weapon in self.situation.weapon_dict.items():
+            if weapon.firing_unit_guid == self.guid:
+                weapon_info = {
+                    "guid": weapon_guid,
+                    "name": weapon.name,
+                    "latitude": weapon.latitude,
+                    "longitude": weapon.longitude,
+                    "altitude": weapon.altitude_agl,
+                    "speed": weapon.current_speed,
+                    "heading": weapon.current_heading,
+                    "target_guid": weapon.primary_target_guid,
+                    "status": weapon.active_unit_status,
+                    "type": "guided",
+                }
+                fired_weapons.append(weapon_info)
+
+        # 检查非制导武器
+        for weapon_guid, weapon in self.situation.unguided_weapon_dict.items():
+            if weapon.firing_unit_guid == self.guid:
+                weapon_info = {
+                    "guid": weapon_guid,
+                    "name": weapon.name,
+                    "latitude": weapon.latitude,
+                    "longitude": weapon.longitude,
+                    "altitude": weapon.altitude_agl,
+                    "speed": weapon.current_speed,
+                    "heading": weapon.current_heading,
+                    "target_guid": weapon.primary_target_guid,
+                    "status": weapon.active_unit_status,
+                    "type": "unguided",
+                }
+                fired_weapons.append(weapon_info)
+
+        return fired_weapons
+
     async def get_par_group(self) -> "CGroup":
         """获取父级编组"""
         return self.situation.group_dict[self.parent_group]

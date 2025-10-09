@@ -34,14 +34,11 @@ class MoziProxyServer:
         """启动代理服务器"""
         try:
             # 连接到真实的 Mozi 服务器
-            self._mozi_channel = Channel(
-                host=self.mozi_server.server_ip,
-                port=self.mozi_server.server_port,
-                ssl=False
-            )
+            self._mozi_channel = Channel(host=self.mozi_server.server_ip, port=self.mozi_server.server_port, ssl=False)
 
             # 导入 Mozi 的 gRPC stub
             from ..proto.grpc import GRpcStub
+
             self._mozi_stub = GRpcStub(self._mozi_channel)
 
             # 创建代理服务实现
@@ -57,7 +54,7 @@ class MoziProxyServer:
                     response = await self.proxy._mozi_stub.grpc_connect(request)
 
                     # 拦截特定命令，更新 Master 本地态势
-                    if hasattr(self.proxy.mozi_server, 'scenario') and self.proxy.mozi_server.scenario:
+                    if hasattr(self.proxy.mozi_server, "scenario") and self.proxy.mozi_server.scenario:
                         await self.proxy._intercept_response(request.name, response)
 
                     return response
@@ -93,20 +90,17 @@ class MoziProxyServer:
                 if response.message and response.message != "脚本执行出错":
                     # 解析并更新本地态势
                     import json
+
                     situation_data = json.loads(response.message)
 
                     # 更新 scenario 对象
                     if command == "GetAllState":
                         # 全量更新
-                        self.mozi_server.scenario.situation._parse_full_situation(
-                            situation_data, self.mozi_server.scenario
-                        )
+                        self.mozi_server.scenario.situation._parse_full_situation(situation_data, self.mozi_server.scenario)
                         mprint.debug("Master 本地态势已全量同步")
                     elif command == "UpdateState":
                         # 增量更新
-                        self.mozi_server.scenario.situation._process_update_data(
-                            situation_data, self.mozi_server.scenario
-                        )
+                        self.mozi_server.scenario.situation._process_update_data(situation_data, self.mozi_server.scenario)
                         mprint.debug("Master 本地态势已增量同步")
 
         except Exception as e:
@@ -132,10 +126,12 @@ class MoziProxyClient:
             self.channel = Channel(host=self.master_ip, port=self.master_port, ssl=False)
 
             from ..proto.grpc import GRpcStub
+
             self.stub = GRpcStub(self.channel)
 
             # 测试连接
             from ..proto.grpc import GrpcRequest
+
             test_request = GrpcRequest(name="print('test')")
             response = await self.stub.grpc_connect(test_request)
 
@@ -171,11 +167,13 @@ class MoziProxyClient:
 
         try:
             from ..proto.grpc import GrpcRequest
+
             request = GrpcRequest(name=command)
             response = await self.stub.grpc_connect(request)
 
             # 转换为 ServerResponse 格式
             from .response import ServerResponse
+
             return ServerResponse(
                 status_code=0,
                 message="OK",

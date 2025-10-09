@@ -180,9 +180,7 @@ class CPatrolMission(CMission):
         Returns:
             bool: 执行结果
         """
-        cmd = (
-            f"ScenEdit_SetMission('{str(self.side)}', '{str(self.guid)}', {{ useFlightSize = {str(check).lower()} }})"
-        )
+        cmd = f"ScenEdit_SetMission('{str(self.side)}', '{str(self.guid)}', {{ useFlightSize = {str(check).lower()} }})"
         self.mozi_server.throw_into_pool(cmd)
         response = await self.mozi_server.send_and_recv(cmd)
         return response.lua_success

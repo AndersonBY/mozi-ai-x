@@ -42,7 +42,9 @@ class CMagazine(Base):
         Returns:
             bool
         """
-        lua_script = f"Hs_ScenEdit_SetMagazineState({{guid='{self.parent_platform}', magazine_guid='{self.guid}',state='{state}'}})"
+        lua_script = (
+            f"Hs_ScenEdit_SetMagazineState({{guid='{self.parent_platform}', magazine_guid='{self.guid}',state='{state}'}})"
+        )
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 

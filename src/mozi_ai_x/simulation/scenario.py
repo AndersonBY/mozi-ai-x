@@ -601,8 +601,7 @@ class CScenario(BaseObject):
             raise ValueError("target_filter_dict不合法")
 
         lua_script = (
-            f"ScenEdit_SetTrigger({{name='{name}',Mode='add',Type='unitdestroyed',"
-            f"TargetFilter={{{target_filter_str}}}}})"
+            f"ScenEdit_SetTrigger({{name='{name}',Mode='add',Type='unitdestroyed',TargetFilter={{{target_filter_str}}}}})"
         )
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
@@ -755,9 +754,7 @@ class CScenario(BaseObject):
         return response.lua_success
 
     @validate_literal_args
-    async def add_trigger_points(
-        self, name: str, side: str, point_value: int, reach_direction: Literal[0, 1, 2]
-    ) -> bool:
+    async def add_trigger_points(self, name: str, side: str, point_value: int, reach_direction: Literal[0, 1, 2]) -> bool:
         """
         添加推演方得分触发器
         限制：专项赛禁用
@@ -863,9 +860,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
-    async def add_trigger_unit_remains_in_area(
-        self, name: str, target_filter_dict: dict, area: list, stay_time: str
-    ) -> bool:
+    async def add_trigger_unit_remains_in_area(self, name: str, target_filter_dict: dict, area: list, stay_time: str) -> bool:
         """
         添加单元停留在区域内触发器
         限制：专项赛禁用
@@ -1172,9 +1167,7 @@ class CScenario(BaseObject):
         return response.lua_success
 
     @validate_literal_args
-    async def add_trigger_regular_time(
-        self, name: str, interval: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-    ) -> bool:
+    async def add_trigger_regular_time(self, name: str, interval: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) -> bool:
         """
         添加规律时间触发器
         限制：专项赛禁用
@@ -1387,8 +1380,7 @@ class CScenario(BaseObject):
             bool: 执行结果
         """
         lua_script = (
-            f"ScenEdit_SetAction({{name='{name}',Mode='add',Type='Points',"
-            f"SideID='{side_name}', PointChange={point_change}}})"
+            f"ScenEdit_SetAction({{name='{name}',Mode='add',Type='Points',SideID='{side_name}', PointChange={point_change}}})"
         )
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
@@ -1619,9 +1611,7 @@ class CScenario(BaseObject):
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
-    async def update_action_lua_script(
-        self, name: str, rename: str | None = None, script_text: str | None = None
-    ) -> bool:
+    async def update_action_lua_script(self, name: str, rename: str | None = None, script_text: str | None = None) -> bool:
         """
         编辑执行lua脚本动作
         限制：专项赛禁用
@@ -1756,8 +1746,7 @@ class CScenario(BaseObject):
             bool: 执行结果
         """
         lua_script = (
-            f"ScenEdit_SetEventAction('{event_name}', {{Mode='replace', name='{action_name}', "
-            f"replacedby='{new_action_name}'}})"
+            f"ScenEdit_SetEventAction('{event_name}', {{Mode='replace', name='{action_name}', replacedby='{new_action_name}'}})"
         )
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
@@ -1932,15 +1921,11 @@ class CScenario(BaseObject):
         Returns:
             bool: 执行结果
         """
-        lua_script = (
-            f"ScenEdit_SetCondition({{name='{name}',Mode='add',Type='scenhasstarted', NOT={str(reverse).lower()}}})"
-        )
+        lua_script = f"ScenEdit_SetCondition({{name='{name}',Mode='add',Type='scenhasstarted', NOT={str(reverse).lower()}}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
-    async def update_condition_scen_has_started(
-        self, name: str, rename: str | None = None, reverse: bool | None = None
-    ) -> bool:
+    async def update_condition_scen_has_started(self, name: str, rename: str | None = None, reverse: bool | None = None) -> bool:
         """
         编辑想定已经开始条件
         限制：专项赛禁用
@@ -1975,15 +1960,11 @@ class CScenario(BaseObject):
             bool: 执行结果
             name:{str:条件名称}
         """
-        lua_script = (
-            f"ScenEdit_SetCondition({{name='{name}',Mode='add',Type='LuaScript', ScriptText=\"{script_text}\"}})"
-        )
+        lua_script = f"ScenEdit_SetCondition({{name='{name}',Mode='add',Type='LuaScript', ScriptText=\"{script_text}\"}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
-    async def update_condition_lua_script(
-        self, name: str, rename: str | None = None, script_text: str | None = None
-    ) -> bool:
+    async def update_condition_lua_script(self, name: str, rename: str | None = None, script_text: str | None = None) -> bool:
         """
         编辑lua脚本条件
         限制：专项赛禁用
@@ -2033,9 +2014,7 @@ class CScenario(BaseObject):
         Returns:
             bool: 执行结果
         """
-        lua_script = (
-            f"ScenEdit_SetTrigger({{name='{name}',Mode='add',Type='AircraftTakeOff',DetectorSideID='{side_guid}'}})"
-        )
+        lua_script = f"ScenEdit_SetTrigger({{name='{name}',Mode='add',Type='AircraftTakeOff',DetectorSideID='{side_guid}'}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success
 
@@ -2052,8 +2031,6 @@ class CScenario(BaseObject):
         Returns:
             bool: 执行结果
         """
-        lua_script = (
-            f"ScenEdit_SetTrigger({{name='{name}',Mode='add',Type='AircraftLanding',DetectorSideID='{side_guid}'}})"
-        )
+        lua_script = f"ScenEdit_SetTrigger({{name='{name}',Mode='add',Type='AircraftLanding',DetectorSideID='{side_guid}'}})"
         response = await self.mozi_server.send_and_recv(lua_script)
         return response.lua_success

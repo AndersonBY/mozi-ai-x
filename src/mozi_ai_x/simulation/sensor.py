@@ -132,6 +132,8 @@ class CSensor(Base):
         Returns:
             bool: 执行结果
         """
-        lua = f"Hs_ScenEdit_SetSensorSwitch({{guid={self.parent_platform},SENSORGUID={self.guid},ISACTIVE={str(active).lower()}}})"
+        lua = (
+            f"Hs_ScenEdit_SetSensorSwitch({{guid={self.parent_platform},SENSORGUID={self.guid},ISACTIVE={str(active).lower()}}})"
+        )
         response = await self.mozi_server.send_and_recv(lua)
         return response.lua_success
